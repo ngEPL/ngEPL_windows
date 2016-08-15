@@ -18,9 +18,11 @@ namespace NewEPL {
 
     class Block : Thumb{
         public List<Block> Children = new List<Block>();
+        public int TestNum = 0;
+        
         // 임시 이름 나중에 바꾸기
         // 암/수, 이름, 실제 영역
-        public Dictionary<KeyValuePair<bool, string>, List<Rect>> Cols = new Dictionary<KeyValuePair<bool, string>, List<Rect>>();
+        public Dictionary<KeyValuePair<bool, string>, Rect> Cols = new Dictionary<KeyValuePair<bool, string>, Rect>();
 
         public double X {
             get {
@@ -40,8 +42,15 @@ namespace NewEPL {
         }
 
         /// 이름 나중에 수정하기.
+        /// 실제 움직일 좌표.
         public double XX = 0;
         public double YY = 0;
+        /// 자식관련 좌표
+        public double XXX = 0;
+        public double YYY = 0;
+
+        public double DifX = 0;
+        public double DifY = 0;
 
         public bool IsFemale {
             get {
@@ -86,80 +95,57 @@ namespace NewEPL {
 
             switch(type) {
             case BlockType.TEST1:
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new List<Rect>() { new Rect(0, 0 + src.Height - 4, 40, 8), new Rect(0, 0 + src.Height - 4, 40, 8) });
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new List<Rect>() { new Rect(0, 0 + 4, 40, 8), new Rect(0, 0 + 4, 40, 8) });
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4, 40, 8));
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 8));
 
                 break;
             case BlockType.TEST2:
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new List<Rect>() { new Rect(0, 0 + 4, 40, 8), new Rect(0, 0 + 4, 40, 8) });
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 8));
 
                 break;
             case BlockType.TEST3:
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new List<Rect>() { new Rect(0, 0 + src.Height - 4 - 8, 40, 8), new Rect(0, 0 + src.Height - 4 - 8, 40, 8) });
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4 - 8, 40, 8));
 
                 break;
             case BlockType.TEST4:
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new List<Rect>() { new Rect(0, 0 + src.Height - 4 - 8, 40, 8), new Rect(0, 0 + src.Height - 4 - 8, 40, 8) });
-                Cols.Add(new KeyValuePair<bool, string>(true, "Mid"), new List<Rect>() { new Rect(0, 0 + src.Height - 4 - 8 + 40, 40, 8), new Rect(0, 0 + src.Height - 4 - 8 + 40, 40, 8) });
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new List<Rect>() { new Rect(0, 0 + 4, 40, 8), new Rect(0, 0 + 4, 40, 8) });
-                //Cols.Add("Down", new Rect(x, y + src.Height - 4 - 8, 40, 8));
-                //Cols.Add("Up", new Rect(x, y + 4, 40, 8));
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + Height - 4 - 8, 40, 8));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Mid"), new Rect(0, 0 + Height - 4 - 8 + 40, 40, 8));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + 4, 40, 8));
 
                 break;
-            }
-
-        }
-        
-        void MoveCols(double x, double y) {
-            foreach (var i in Cols.Keys.ToList()) {
-                Cols[i][0] = new Rect(Cols[i][1].X + x, Cols[i][1].Y + y, Cols[i][0].Width, Cols[i][0].Height);
             }
         }
 
         /// 움직일때 뭉쳐서 움직임...
         public void MoveBlocks(double x, double y) {
-            XX = x  ;
-            YY = y;
-
-            X = XX;
-            Y = YY;
+            X = DifX + x;
+            Y = DifY + y;
 
             foreach (var i in Children) {
-                i.MoveBlocks(x, y);
+                i.MoveBlocks(DifX + x, DifY + y);
             }
-
-            MoveCols(x, y);
         }
 
         public void AddChild(Block child) {
             Children.Add(child);
             child.MoveBlocks(this.X, this.Y + Height - 18);
+            child.DifX = this.X - child.X;
+            child.DifY = -(this.Y - child.Y);
         }
-
-        public void Update() {
-            X += XX;
-            Y += YY;
-        }
-
-        /// 여기서 콜라이더 위치가 안바뀌어서 문제가 발생하는듯.
-        //void SetPosition(double x, double y) {
-        //    X = x;
-        //    Y = y;
-        //    Move
-
-        //    foreach(var i in Children) {
-        //        i.SetPosition(x, y + Height - 18);
-        //    }
-        //}
 
         public Rect GetFemale() {
             Rect ret = new Rect();
 
             foreach(var i in Cols) {
-                if (!i.Key.Key) ret = i.Value[0];
+                if (!i.Key.Key) ret = i.Value;
             }
 
             return ret;
+        }
+
+        /// 이름 바꾸기
+        public static Rect RealCollider(Block b, Rect r) {
+            return new Rect(b.X + r.X, b.Y + r.Y, r.Width, r.Height);
         }
     }
 

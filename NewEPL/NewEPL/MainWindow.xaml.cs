@@ -14,13 +14,14 @@ namespace NewEPL {
     /// MainWindow.xaml에 대한 상호 작용 논리
     /// </summary>
     public partial class MainWindow : Window {
-        List<BlockList> toggleList;
-        Window dw = null;
+        List<BlockList> ToggleList;
+
+        int TestCount = 0;
 
         public MainWindow() {
             InitializeComponent();
 
-            toggleList = new List<BlockList>();
+            ToggleList = new List<BlockList>();
 
             var blocks_if = new List<BlockData>();
             blocks_if.Add(new BlockData() { Size = (int)(210 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_3.png", Tag = BlockType.TEST3 });
@@ -38,54 +39,15 @@ namespace NewEPL {
 
             var blocks_arduino = new List<BlockData>();
 
-            toggleList.Add(new BlockList() { Name = "조건", Source = blocks_if });
-            toggleList.Add(new BlockList() { Name = "반복", Source = blocks_for });
-            toggleList.Add(new BlockList() { Name = "텍스트", Source = blocks_text });
-            toggleList.Add(new BlockList() { Name = "리스트", Source = blocks_list });
-            toggleList.Add(new BlockList() { Name = "마이크로 비트", Source = blocks_microbit });
-            toggleList.Add(new BlockList() { Name = "아두이노", Source = blocks_arduino });
+            ToggleList.Add(new BlockList() { Name = "조건", Source = blocks_if });
+            ToggleList.Add(new BlockList() { Name = "반복", Source = blocks_for });
+            ToggleList.Add(new BlockList() { Name = "텍스트", Source = blocks_text });
+            ToggleList.Add(new BlockList() { Name = "리스트", Source = blocks_list });
+            ToggleList.Add(new BlockList() { Name = "마이크로 비트", Source = blocks_microbit });
+            ToggleList.Add(new BlockList() { Name = "아두이노", Source = blocks_arduino });
 
-            BlockLists.ItemsSource = toggleList;
+            BlockLists.ItemsSource = ToggleList;
         }
-
-        void CreateDragDropWindow(Visual e) {
-            dw = new Window();
-            dw.WindowStyle = WindowStyle.None;
-            dw.AllowsTransparency = true;
-            dw.AllowDrop = false;
-            dw.Background = null;
-            dw.IsHitTestVisible = false;
-            dw.SizeToContent = SizeToContent.WidthAndHeight;
-            dw.Topmost = true;
-            dw.ShowInTaskbar = false;
-
-            Rectangle r = new Rectangle();
-            r.Width = ((FrameworkElement)e).ActualWidth;
-            r.Height = ((FrameworkElement)e).ActualHeight;
-            r.Fill = new VisualBrush(e);
-            dw.Content = r;
-
-
-            Win32Point w32Mouse = new Win32Point();
-            GetCursorPos(ref w32Mouse);
-
-            this.dw.Left = w32Mouse.X;
-            this.dw.Top = w32Mouse.Y;
-            this.dw.Show();
-
-        }
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool GetCursorPos(ref Win32Point pt);
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct Win32Point {
-            public Int32 X;
-            public Int32 Y;
-        };
-
-        
 
         private void image_Drag(object sender, MouseButtonEventArgs e) {
             var image = e.Source as Image;
@@ -98,6 +60,7 @@ namespace NewEPL {
             var copy = new Block(sat.Source, e.GetPosition(this.canvas).X, e.GetPosition(this.canvas).Y, sat.Source.Width * 0.8, sat.Type);
             copy.DragDelta += Thumb_DragDelta;
             copy.DragCompleted += Thumb_DragCompleted;
+            copy.TestNum = TestCount++;
             this.canvas.Children.Add(copy);
         }
 
@@ -134,10 +97,7 @@ namespace NewEPL {
 
         private void Thumb_DragDelta(object sender, DragDeltaEventArgs e) {
             var b = sender as Block;
-            b.XX += e.HorizontalChange;
-            b.YY += e.VerticalChange;
-            b.Update();
-            //b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
+            b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
             //b.X += e.HorizontalChange;
             //b.Y += e.VerticalChange;
             //foreach(var i in b.Children) {
@@ -165,8 +125,11 @@ namespace NewEPL {
                     var other = i as Block;
                     /// 블록의 어느 위치에 붙일 지는 아직 안만듦, 무조건 아래쪽에 붙는다고 가정하고 만들어짐.
                     foreach (var j in other.Cols) {
-                        if (!j.Key.Key) continue;
-                        if (b.GetFemale().IntersectsWith(j.Value[0])) {
+                        //if (!j.Key.Key) continue;
+                        //var ccc = Block.RealCollider(b, b.GetFemale());
+                        //var ddd = Block.RealCollider(other, j.Value);
+                        //MessageBox.Show(ccc.X.ToString() + ", " + ccc.Y.ToString() + "\n" + ddd.X.ToString() + ", " + ddd.Y.ToString());
+                        if (Block.RealCollider(b, b.GetFemale()).IntersectsWith(Block.RealCollider(other, j.Value))) {
                             MessageBox.Show("Get!");
                             other.AddChild(b);
                         }
