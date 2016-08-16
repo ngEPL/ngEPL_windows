@@ -15,6 +15,7 @@ namespace NewEPL {
     /// </summary>
     public partial class MainWindow : Window {
         List<BlockList> ToggleList;
+        Rectangle TestPreview;
 
         int TestCount = 0;
 
@@ -47,6 +48,19 @@ namespace NewEPL {
             ToggleList.Add(new BlockList() { Name = "아두이노", Source = blocks_arduino });
 
             BlockLists.ItemsSource = ToggleList;
+
+            TestPreview = new Rectangle {
+                Fill = Brushes.LightBlue,
+                Width = 15,
+                Height = 15
+            };
+
+            Canvas.SetLeft(TestPreview, 0);
+            Canvas.SetTop(TestPreview, 0);
+            Canvas.SetZIndex(TestPreview, 10000000);
+            canvas.Children.Add(TestPreview);
+
+            TestPreview.Visibility = Visibility.Hidden;
         }
 
         private void image_Drag(object sender, MouseButtonEventArgs e) {
@@ -98,19 +112,27 @@ namespace NewEPL {
         private void Thumb_DragDelta(object sender, DragDeltaEventArgs e) {
             var b = sender as Block;
             b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
-            //b.X += e.HorizontalChange;
-            //b.Y += e.VerticalChange;
-            //foreach(var i in b.Children) {
-            //    i.X += e.HorizontalChange;
-            //    i.Y += e.VerticalChange;
-            //}
-            //string txt = "";
-            //foreach(Block i in canvas.Children) {
-            //    txt += "Down: " + i.Cols["Down"].X.ToString() + ", " + i.Cols["Down"].Y.ToString() + "\n" + "Up: " + i.Cols["Up"].X.ToString() + ", " + i.Cols["Up"].Y.ToString() + "\n" + "--------------------------------------------------------" + "\n";
-            //}
-            //test.Content = txt;
-            test.Content = b.X.ToString() + ", " + b.Y.ToString();
-            //test.Content = (canvas.Children[0] as Block).Cols[new KeyValuePair<bool, string>(true, "Down")][0].X.ToString() + ", " + (canvas.Children[0] as Block).Cols[new KeyValuePair<bool, string>(true, "Down")][0].Y.ToString();
+
+            /// 붙이기
+            if (b.IsFemale) {
+                /// canvas.Children 대신 각 마지막 자식들이 들어가야함. 아니면 검색하면서 자식이 있는 블록은 무시하기.
+                foreach (var i in canvas.Children) {
+                    if (i == b) continue;
+                    /// 나중에 캔버스 사용하지 말고 리스트를 따로 만들기.
+                    if (i.GetType() != typeof(Block)) continue;
+                   
+                    var other = i as Block;
+                    /// 블록의 어느 위치에 붙일 지는 아직 안만듦, 무조건 아래쪽에 붙는다고 가정하고 만들어짐.
+                    foreach (var j in other.Cols) {
+                        if (!j.Key.Key) continue;
+                        if (Block.RealCollider(b, b.GetFemale()).IntersectsWith(Block.RealCollider(other, j.Value))) {
+                            Canvas.SetLeft(TestPreview, other.X + j.Value.X);
+                            Canvas.SetTop(TestPreview, other.Y + j.Value.Y);
+                            TestPreview.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+            }
         }
         
         private void Thumb_DragCompleted(object sender, DragCompletedEventArgs e) { 
@@ -121,33 +143,18 @@ namespace NewEPL {
                 /// canvas.Children 대신 각 마지막 자식들이 들어가야함. 아니면 검색하면서 자식이 있는 블록은 무시하기.
                 foreach(var i in canvas.Children) {
                     if (i == b) continue;
+                    if (i.GetType() != typeof(Block)) continue;
 
                     var other = i as Block;
                     /// 블록의 어느 위치에 붙일 지는 아직 안만듦, 무조건 아래쪽에 붙는다고 가정하고 만들어짐.
                     foreach (var j in other.Cols) {
-                        //if (!j.Key.Key) continue;
-                        //var ccc = Block.RealCollider(b, b.GetFemale());
-                        //var ddd = Block.RealCollider(other, j.Value);
-                        //MessageBox.Show(ccc.X.ToString() + ", " + ccc.Y.ToString() + "\n" + ddd.X.ToString() + ", " + ddd.Y.ToString());
+                        if (!j.Key.Key) continue;
                         if (Block.RealCollider(b, b.GetFemale()).IntersectsWith(Block.RealCollider(other, j.Value))) {
-                            MessageBox.Show("Get!");
                             other.AddChild(b);
                         }
                     }
                 }
             }
-            //if (b.haveConcave) {
-            //    foreach (var i in canvas.Children) {
-            //        if (i == b) continue;
-
-            //        var child = i as Block;
-            //        //if (!child.haveConvex) continue;
-            //        if(child.Cols[new KeyValuePair<bool, string>(true, "Down")].IntersectsWith(b.Cols[new KeyValuePair<bool, string>(false, "Up")])) {
-            //            MessageBox.Show("Check!");
-            //            child.AddChild(b);
-            //        }
-            //    }
-            //}
         }
     }
 }

@@ -21,3 +21,6 @@ C:\Users\a\documents\visual studio 2015\Projects\NewEPL\NewEPL\bin\Debug\Resourc
 C:\Users\a\documents\visual studio 2015\Projects\NewEPL\NewEPL\bin\Debug\Resources\block_test_2.png
 C:\Users\a\documents\visual studio 2015\Projects\NewEPL\NewEPL\bin\Debug\Resources\block_test_3.png
 C:\Users\a\documents\visual studio 2015\Projects\NewEPL\NewEPL\bin\Debug\Resources\block_test_4.png
+C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\NewEPL.exe.config
+C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\obj\Debug\NewEPL.exe
+C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\obj\Debug\NewEPL.pdb

@@ -88,29 +88,30 @@ namespace NewEPL {
             X = x;
             Y = y;
 
-            Width = src.Width;
-            Height = src.Height;
+            /// 이미지 배율수
+            Width = src.Width * 0.8;
+            Height = src.Height * 0.8;
 
             Type = type;
 
             switch(type) {
             case BlockType.TEST1:
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4, 40, 8));
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 8));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 20));
 
                 break;
             case BlockType.TEST2:
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 8));
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 20));
 
                 break;
             case BlockType.TEST3:
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4 - 8, 40, 8));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4, 40, 20));
 
                 break;
             case BlockType.TEST4:
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + Height - 4 - 8, 40, 8));
-                Cols.Add(new KeyValuePair<bool, string>(true, "Mid"), new Rect(0, 0 + Height - 4 - 8 + 40, 40, 8));
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + 4, 40, 8));
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Mid"), new Rect(40, 0 + 4 + 40, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4, 40, 20));
 
                 break;
             }
@@ -128,7 +129,7 @@ namespace NewEPL {
 
         public void AddChild(Block child) {
             Children.Add(child);
-            child.MoveBlocks(this.X, this.Y + Height - 18);
+            child.MoveBlocks(this.X, this.Y + Height - 5);
             child.DifX = this.X - child.X;
             child.DifY = -(this.Y - child.Y);
         }
