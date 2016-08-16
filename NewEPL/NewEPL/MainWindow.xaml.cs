@@ -19,6 +19,8 @@ namespace NewEPL {
 
         int TestCount = 0;
 
+        int ZIndexManager = 0;
+
         public MainWindow() {
             InitializeComponent();
 
@@ -72,10 +74,12 @@ namespace NewEPL {
         private void canvas_Drop(object sender, DragEventArgs e) {
             var sat = e.Data.GetData(typeof(SourceAndType)) as SourceAndType;
             var copy = new Block(sat.Source, e.GetPosition(this.canvas).X, e.GetPosition(this.canvas).Y, sat.Source.Width * 0.8, sat.Type);
+            copy.DragStarted += Thumb_DragStarted;
             copy.DragDelta += Thumb_DragDelta;
             copy.DragCompleted += Thumb_DragCompleted;
-            copy.TestNum = TestCount++;
+            Canvas.SetZIndex(copy, ZIndexManager++);
             this.canvas.Children.Add(copy);
+            copy.TestNum = TestCount++;
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e) {
@@ -90,10 +94,10 @@ namespace NewEPL {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             ToggleCheck(Toggle_if, true);
-            ToggleCheck(Toggle_for, false);
+            ToggleCheck(Toggle_for, true);
             ToggleCheck(Toggle_text, true);
-            ToggleCheck(Toggle_list, false);
-            ToggleCheck(Toggle_microbit, false);
+            ToggleCheck(Toggle_list, true);
+            ToggleCheck(Toggle_microbit, true);
             ToggleCheck(Toggle_arduino, true);
         }
 
@@ -109,14 +113,23 @@ namespace NewEPL {
         private void Image_GiveFeedback(object sender, GiveFeedbackEventArgs e) {
         }
 
+        private void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
+            var b = sender as Block;
+
+            Canvas.SetZIndex(b, 1000000);
+
+        }
+
         private void Thumb_DragDelta(object sender, DragDeltaEventArgs e) {
             var b = sender as Block;
+            bool escaper = false;
             b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
 
             /// 붙이기
             if (b.IsFemale) {
                 /// canvas.Children 대신 각 마지막 자식들이 들어가야함. 아니면 검색하면서 자식이 있는 블록은 무시하기.
                 foreach (var i in canvas.Children) {
+                    if (escaper) break;
                     if (i == b) continue;
                     /// 나중에 캔버스 사용하지 말고 리스트를 따로 만들기.
                     if (i.GetType() != typeof(Block)) continue;
@@ -125,10 +138,12 @@ namespace NewEPL {
                     /// 블록의 어느 위치에 붙일 지는 아직 안만듦, 무조건 아래쪽에 붙는다고 가정하고 만들어짐.
                     foreach (var j in other.Cols) {
                         if (!j.Key.Key) continue;
+                        if (other.Children.ContainsKey(j.Key)) continue;
                         if (Block.RealCollider(b, b.GetFemale()).IntersectsWith(Block.RealCollider(other, j.Value))) {
                             Canvas.SetLeft(TestPreview, other.X + j.Value.X);
                             Canvas.SetTop(TestPreview, other.Y + j.Value.Y);
                             TestPreview.Visibility = Visibility.Visible;
+                            escaper = true;
                         }
                     }
                 }
@@ -137,20 +152,23 @@ namespace NewEPL {
         
         private void Thumb_DragCompleted(object sender, DragCompletedEventArgs e) { 
             var b = sender as Block;
-
+            bool escaper = false;
             /// 붙이기
             if (b.IsFemale) {
                 /// canvas.Children 대신 각 마지막 자식들이 들어가야함. 아니면 검색하면서 자식이 있는 블록은 무시하기.
                 foreach(var i in canvas.Children) {
+                    if (escaper) break;
                     if (i == b) continue;
                     if (i.GetType() != typeof(Block)) continue;
 
                     var other = i as Block;
-                    /// 블록의 어느 위치에 붙일 지는 아직 안만듦, 무조건 아래쪽에 붙는다고 가정하고 만들어짐.
                     foreach (var j in other.Cols) {
                         if (!j.Key.Key) continue;
+                        if (other.Children.ContainsKey(j.Key)) continue;
                         if (Block.RealCollider(b, b.GetFemale()).IntersectsWith(Block.RealCollider(other, j.Value))) {
-                            other.AddChild(b);
+                            other.AddChild(j.Key, b, Block.RealCollider(other, j.Value));
+                            TestPreview.Visibility = Visibility.Hidden;
+                            escaper = true;
                         }
                     }
                 }
