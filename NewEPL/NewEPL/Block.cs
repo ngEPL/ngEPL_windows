@@ -76,11 +76,14 @@ namespace NewEPL {
         BlockType Type;
 
         public Block(ImageSource src, double x, double y, double width, BlockType type) {
+            var patch = new NinePatch(src);
+            patch.ClearCache();
+
             var t = new ControlTemplate();
             var f = new FrameworkElementFactory(typeof(Image));
-            f.SetValue(FrameworkElement.WidthProperty, width);
+            f.SetValue(FrameworkElement.WidthProperty, 600.0);
             f.SetValue(FrameworkElement.HeightProperty, Double.NaN);
-            f.SetValue(Image.SourceProperty, src);
+            f.SetValue(Image.SourceProperty, patch.GetPatchedImage(600, 200));
             t.VisualTree = f;
             this.Template = t; 
 

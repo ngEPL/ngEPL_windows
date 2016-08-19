@@ -30,6 +30,7 @@ namespace NewEPL {
             blocks_if.Add(new BlockData() { Size = (int)(210 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_3.png", Tag = BlockType.TEST3 });
             blocks_if.Add(new BlockData() { Size = (int)(210 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_1.png", Tag = BlockType.TEST1 });
             blocks_if.Add(new BlockData() { Size = (int)(210 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_2.png", Tag = BlockType.TEST2 });
+            blocks_if.Add(new BlockData() { Size = (int)(82), Res = "pack://siteoforigin:,,,/Resources/btn_dropdown_normal.9.png", Tag = BlockType.TEST2 });
 
             var blocks_for = new List<BlockData>();
             blocks_for.Add(new BlockData() { Size = (int)(285 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_4.png", Tag = BlockType.TEST4 });
