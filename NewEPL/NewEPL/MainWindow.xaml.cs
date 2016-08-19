@@ -116,8 +116,9 @@ namespace NewEPL {
         private void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
             var b = sender as Block;
 
+            /// 이프문 블럭같은 경우 이프문 안쪽에 들어가는 블록이 존재하는데 
+            /// 이프문의 zindex가 안쪽의 블록보다 높을 경우 안쪽의 블록을 선택할 수 없는 문제가 있음.
             Canvas.SetZIndex(b, 1000000);
-
         }
 
         private void Thumb_DragDelta(object sender, DragDeltaEventArgs e) {
@@ -125,7 +126,21 @@ namespace NewEPL {
             bool escaper = false;
             b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
 
-            /// 붙이기
+            /// 일단 움직이면 자식에서 없애버림.
+            /// 부모가 있다면,
+            if (b.Parent != null) {
+                var me = new KeyValuePair<bool, string>();
+                foreach(var i in b.Parent.Children) {
+                    if(i.Value == b) {
+                        me = i.Key;
+                        break;
+                    }
+                }
+                b.Parent.Children.Remove(me);
+                b.Parent = null;
+            }
+
+            /// 어디에 붙일건지 표시
             if (b.IsFemale) {
                 /// canvas.Children 대신 각 마지막 자식들이 들어가야함. 아니면 검색하면서 자식이 있는 블록은 무시하기.
                 foreach (var i in canvas.Children) {
@@ -146,7 +161,7 @@ namespace NewEPL {
                             escaper = true;
                         }
                     }
-                }
+                } 
             }
         }
         
@@ -162,6 +177,7 @@ namespace NewEPL {
                     if (i.GetType() != typeof(Block)) continue;
 
                     var other = i as Block;
+
                     foreach (var j in other.Cols) {
                         if (!j.Key.Key) continue;
                         if (other.Children.ContainsKey(j.Key)) continue;
@@ -169,7 +185,7 @@ namespace NewEPL {
                             other.AddChild(j.Key, b, Block.RealCollider(other, j.Value));
                             TestPreview.Visibility = Visibility.Hidden;
                             escaper = true;
-                        }
+                        } 
                     }
                 }
             }

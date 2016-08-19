@@ -17,12 +17,14 @@ namespace NewEPL {
     }
 
     class Block : Thumb{
-        public List<Block> Children = new List<Block>();
+        //public List<Block> Children = new List<Block>();
         public int TestNum = 0;
         
         // 임시 이름 나중에 바꾸기
         // 암/수, 이름, 실제 영역
         public Dictionary<KeyValuePair<bool, string>, Rect> Cols = new Dictionary<KeyValuePair<bool, string>, Rect>();
+        public Dictionary<KeyValuePair<bool, string>, Block> Children = new Dictionary<KeyValuePair<bool, string>, Block>();
+        public Block Parent = null;
 
         public double X {
             get {
@@ -80,7 +82,7 @@ namespace NewEPL {
             f.SetValue(FrameworkElement.HeightProperty, Double.NaN);
             f.SetValue(Image.SourceProperty, src);
             t.VisualTree = f;
-            this.Template = t;
+            this.Template = t; 
 
             XX = x;
             YY = y;
@@ -96,41 +98,41 @@ namespace NewEPL {
 
             switch(type) {
             case BlockType.TEST1:
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4, 40, 20));
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 5, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 5, 40, 20));
 
                 break;
             case BlockType.TEST2:
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 5, 40, 20));
 
                 break;
             case BlockType.TEST3:
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 5, 40, 20));
 
                 break;
             case BlockType.TEST4:
-                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 4, 40, 20));
-                Cols.Add(new KeyValuePair<bool, string>(true, "Mid"), new Rect(40, 0 + 4 + 40, 40, 20));
-                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 4, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(false, "Up"), new Rect(0, 0 + 5, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Mid"), new Rect(30, 0 + 5 + 35, 40, 20));
+                Cols.Add(new KeyValuePair<bool, string>(true, "Down"), new Rect(0, 0 + Height - 5, 40, 20));
 
                 break;
             }
         }
-
-        /// 움직일때 뭉쳐서 움직임...
+        
         public void MoveBlocks(double x, double y) {
-            X = DifX + x;
-            Y = DifY + y;
+            X = x;
+            Y = y;
 
             foreach (var i in Children) {
-                i.MoveBlocks(DifX + x, DifY + y);
+                i.Value.MoveBlocks(i.Value.DifX + x, i.Value.DifY + y);
             }
         }
 
-        public void AddChild(Block child) {
-            Children.Add(child);
-            child.MoveBlocks(this.X, this.Y + Height - 5);
-            child.DifX = this.X - child.X;
+        public void AddChild(KeyValuePair<bool, string> key, Block child, Rect Col) {
+            child.Parent = this;
+            Children.Add(key, child);
+            child.MoveBlocks(Col.X, Col.Y);
+            child.DifX = -(this.X - child.X);
             child.DifY = -(this.Y - child.Y);
         }
 
