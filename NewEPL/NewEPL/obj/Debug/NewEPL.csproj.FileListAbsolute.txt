@@ -27,7 +27,6 @@ C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\obj\Debug\NewEPL.pdb
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_arduino.png
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_if.png
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_q.png
-C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\btn_dropdown_normal.9.png
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_test_1.png
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_test_2.png
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_test_3.png
@@ -44,3 +43,7 @@ C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\obj\Debug\MainWindow.bam
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\obj\Debug\NewEPL.g.resources
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\obj\Debug\NewEPL.Properties.Resources.resources
 C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\obj\Debug\NewEPL.csproj.GenerateResource.Cache
+C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_test_1.9.png
+C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_test_2.9.png
+C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_test_3.9.png
+C:\Users\a\Documents\GitHub\ngEPL_windows\NewEPL\NewEPL\bin\Debug\Resources\block_test_4.9.png

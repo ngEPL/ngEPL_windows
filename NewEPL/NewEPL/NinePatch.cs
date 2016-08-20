@@ -44,6 +44,11 @@ namespace NewEPL {
             FindPatchRegion();
         }
 
+        public NinePatch(string path) {
+            Source = new BitmapImage(new Uri(path));
+            FindPatchRegion();
+        }
+
         public void ClearCache() {
             Cache.Clear();
         }

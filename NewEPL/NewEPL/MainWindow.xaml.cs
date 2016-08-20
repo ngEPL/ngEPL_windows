@@ -27,13 +27,12 @@ namespace NewEPL {
             ToggleList = new List<BlockList>();
 
             var blocks_if = new List<BlockData>();
-            blocks_if.Add(new BlockData() { Size = (int)(210 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_3.png", Tag = BlockType.TEST3 });
-            blocks_if.Add(new BlockData() { Size = (int)(210 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_1.png", Tag = BlockType.TEST1 });
-            blocks_if.Add(new BlockData() { Size = (int)(210 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_2.png", Tag = BlockType.TEST2 });
-            blocks_if.Add(new BlockData() { Size = (int)(82), Res = "pack://siteoforigin:,,,/Resources/btn_dropdown_normal.9.png", Tag = BlockType.TEST2 });
+            blocks_if.Add(new BlockData() { Width = 210 * 0.8, Height = 66 * 0.8, Source = "pack://siteoforigin:,,,/Resources/block_test_3.png", Tag = BlockType.TEST3 });
+            blocks_if.Add(new BlockData() { Width = 210 * 0.8, Height = 66 * 0.8, Source = "pack://siteoforigin:,,,/Resources/block_test_1.png", Tag = BlockType.TEST1 });
+            blocks_if.Add(new BlockData() { Width = 210 * 0.8, Height = 66 * 0.8, Source = "pack://siteoforigin:,,,/Resources/block_test_2.png", Tag = BlockType.TEST2 });
 
             var blocks_for = new List<BlockData>();
-            blocks_for.Add(new BlockData() { Size = (int)(285 * 0.8), Res = "pack://siteoforigin:,,,/Resources/block_test_4.png", Tag = BlockType.TEST4 });
+            blocks_for.Add(new BlockData() { Width = 285 * 0.8, Height = 160 * 0.8, Source = "pack://siteoforigin:,,,/Resources/block_test_4.png", Tag = BlockType.TEST4 });
 
             var blocks_text = new List<BlockData>();
 
@@ -68,13 +67,13 @@ namespace NewEPL {
 
         private void image_Drag(object sender, MouseButtonEventArgs e) {
             var image = e.Source as Image;
-            var data = new DataObject(typeof(SourceAndType), new SourceAndType() { Source = image.Source, Type = (BlockType)image.Tag});
+            var data = new DataObject(typeof(BlockData), new BlockData() { Width = image.Source.Width, Height = image.Source.Height, Source = (image.Source as BitmapSource).ToString(), Tag = (BlockType)image.Tag});
             DragDrop.DoDragDrop(image, data, DragDropEffects.Move);
         }
 
         private void canvas_Drop(object sender, DragEventArgs e) {
-            var sat = e.Data.GetData(typeof(SourceAndType)) as SourceAndType;
-            var copy = new Block(sat.Source, e.GetPosition(this.canvas).X, e.GetPosition(this.canvas).Y, sat.Source.Width * 0.8, sat.Type);
+            var data = e.Data.GetData(typeof(BlockData)) as BlockData;
+            var copy = new Block(data.Source, e.GetPosition(this.canvas).X, e.GetPosition(this.canvas).Y, data.Width, data.Height, data.Tag);
             copy.DragStarted += Thumb_DragStarted;
             copy.DragDelta += Thumb_DragDelta;
             copy.DragCompleted += Thumb_DragCompleted;
@@ -168,6 +167,7 @@ namespace NewEPL {
         
         private void Thumb_DragCompleted(object sender, DragCompletedEventArgs e) { 
             var b = sender as Block;
+            Block tmpOther = null;
             bool escaper = false;
             /// 붙이기
             if (b.IsFemale) {
@@ -185,8 +185,15 @@ namespace NewEPL {
                         if (Block.RealCollider(b, b.GetFemale()).IntersectsWith(Block.RealCollider(other, j.Value))) {
                             other.AddChild(j.Key, b, Block.RealCollider(other, j.Value));
                             TestPreview.Visibility = Visibility.Hidden;
+                            tmpOther = other;
                             escaper = true;
                         } 
+                    }
+                }
+                /// 아무 생각 없이 나인패치 잘 작동하는지 보고 싶어 넣은 코드. 나중에 수정해야 함.
+                if (escaper) {
+                    if (tmpOther.Type == BlockType.TEST4) {
+                        tmpOther.Resize((int)tmpOther.DefaultWidth, 220 * tmpOther.Children.Count);
                     }
                 }
             }

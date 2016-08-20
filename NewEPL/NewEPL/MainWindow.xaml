@@ -79,7 +79,7 @@
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel>
-                                                    <Image Width="{Binding Size}" Height="Auto" Source="{Binding Res}" Tag="{Binding Tag}" MouseLeftButtonDown="image_Drag" GiveFeedback="Image_GiveFeedback"/>
+                                                    <Image Width="{Binding Width}" Height="{Binding Height}" Source="{Binding Source}" Tag="{Binding Tag}" MouseLeftButtonDown="image_Drag" GiveFeedback="Image_GiveFeedback"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>

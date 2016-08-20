@@ -103,9 +103,29 @@ namespace NewEPL.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap block_test_1_9 {
+            get {
+                object obj = ResourceManager.GetObject("block_test_1_9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap block_test_2 {
             get {
                 object obj = ResourceManager.GetObject("block_test_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap block_test_2_9 {
+            get {
+                object obj = ResourceManager.GetObject("block_test_2_9", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,6 +143,16 @@ namespace NewEPL.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap block_test_3_9 {
+            get {
+                object obj = ResourceManager.GetObject("block_test_3_9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap block_test_4 {
             get {
                 object obj = ResourceManager.GetObject("block_test_4", resourceCulture);
@@ -133,9 +163,9 @@ namespace NewEPL.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static System.Drawing.Bitmap btn_dropdown_normal_9 {
+        internal static System.Drawing.Bitmap block_test_4_9 {
             get {
-                object obj = ResourceManager.GetObject("btn_dropdown_normal_9", resourceCulture);
+                object obj = ResourceManager.GetObject("block_test_4_9", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
