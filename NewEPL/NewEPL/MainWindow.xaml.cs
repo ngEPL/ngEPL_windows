@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace NewEPL {
     /// <summary>
@@ -26,13 +29,18 @@ namespace NewEPL {
 
             ToggleList = new List<BlockList>();
 
+            //XmlDocument doc = new XmlDocument();
+            //doc.Load(AppDomain.CurrentDomain.BaseDirectory + "/Resources/block_test_1.xml");
+            //var block = doc.SelectSingleNode("/")["block"];
+            //block.GetAttribute("name");
+
             var blocks_if = new List<BlockData>();
-            blocks_if.Add(new BlockData() { Width = 210 * 0.8, Height = 66 * 0.8, Source = "pack://siteoforigin:,,,/Resources/block_test_3.png", Tag = BlockType.TEST3 });
-            blocks_if.Add(new BlockData() { Width = 210 * 0.8, Height = 66 * 0.8, Source = "pack://siteoforigin:,,,/Resources/block_test_1.png", Tag = BlockType.TEST1 });
-            blocks_if.Add(new BlockData() { Width = 210 * 0.8, Height = 66 * 0.8, Source = "pack://siteoforigin:,,,/Resources/block_test_2.png", Tag = BlockType.TEST2 });
+            blocks_if.Add(new BlockData() { Template = new BlockTest1() });
+            blocks_if.Add(new BlockData() { Template = new BlockTest1() });
+            blocks_if.Add(new BlockData() { Template = new BlockTest1() });
 
             var blocks_for = new List<BlockData>();
-            blocks_for.Add(new BlockData() { Width = 285 * 0.8, Height = 160 * 0.8, Source = "pack://siteoforigin:,,,/Resources/block_test_4.png", Tag = BlockType.TEST4 });
+            blocks_for.Add(new BlockData() { Template = new BlockTest1() });
 
             var blocks_text = new List<BlockData>();
 
@@ -42,12 +50,12 @@ namespace NewEPL {
 
             var blocks_arduino = new List<BlockData>();
 
-            ToggleList.Add(new BlockList() { Name = "조건", Source = blocks_if });
-            ToggleList.Add(new BlockList() { Name = "반복", Source = blocks_for });
-            ToggleList.Add(new BlockList() { Name = "텍스트", Source = blocks_text });
-            ToggleList.Add(new BlockList() { Name = "리스트", Source = blocks_list });
-            ToggleList.Add(new BlockList() { Name = "마이크로 비트", Source = blocks_microbit });
-            ToggleList.Add(new BlockList() { Name = "아두이노", Source = blocks_arduino });
+            ToggleList.Add(new BlockList() { Category = "조건", Source = blocks_if });
+            ToggleList.Add(new BlockList() { Category = "반복", Source = blocks_for });
+            ToggleList.Add(new BlockList() { Category = "텍스트", Source = blocks_text });
+            ToggleList.Add(new BlockList() { Category = "리스트", Source = blocks_list });
+            ToggleList.Add(new BlockList() { Category = "마이크로 비트", Source = blocks_microbit });
+            ToggleList.Add(new BlockList() { Category = "아두이노", Source = blocks_arduino });
 
             BlockLists.ItemsSource = ToggleList;
 
@@ -63,23 +71,28 @@ namespace NewEPL {
             canvas.Children.Add(TestPreview);
 
             TestPreview.Visibility = Visibility.Hidden;
-        }
+        }                                                            
 
-        private void image_Drag(object sender, MouseButtonEventArgs e) {
-            var image = e.Source as Image;
-            var data = new DataObject(typeof(BlockData), new BlockData() { Width = image.Source.Width, Height = image.Source.Height, Source = (image.Source as BitmapSource).ToString(), Tag = (BlockType)image.Tag});
-            DragDrop.DoDragDrop(image, data, DragDropEffects.Move);
+        private void block_Drag(object sender, MouseButtonEventArgs e) {
+            var block = sender as BlockTemplate;
+            var data = new DataObject(typeof(BlockTemplate), BlockTemplate.CreateBlock(block));
+            DragDrop.DoDragDrop(block, data, DragDropEffects.Copy);
         }
 
         private void canvas_Drop(object sender, DragEventArgs e) {
-            var data = e.Data.GetData(typeof(BlockData)) as BlockData;
-            var copy = new Block(data.Source, e.GetPosition(this.canvas).X, e.GetPosition(this.canvas).Y, data.Width, data.Height, data.Tag);
-            copy.DragStarted += Thumb_DragStarted;
-            copy.DragDelta += Thumb_DragDelta;
-            copy.DragCompleted += Thumb_DragCompleted;
-            Canvas.SetZIndex(copy, ZIndexManager++);
+            var data = e.Data.GetData(typeof(BlockTemplate)) as BlockTemplate;
+            var copy = new BlockTemplate();
+            Canvas.SetLeft(copy, e.GetPosition(canvas).X);
+            Canvas.SetTop(copy, e.GetPosition(canvas).Y);
+            copy.Content = data;
             this.canvas.Children.Add(copy);
-            copy.TestNum = TestCount++;
+            //var copy = new Block(data.Source, e.GetPosition(this.canvas).X, e.GetPosition(this.canvas).Y, data.Width, data.Height, data.Tag);
+            //copy.DragStarted += Thumb_DragStarted;
+            //copy.DragDelta += Thumb_DragDelta;
+            //copy.DragCompleted += Thumb_DragCompleted;
+            //Canvas.SetZIndex(copy, ZIndexManager++);
+            //this.canvas.Children.Add(copy);
+            //copy.TestNum = TestCount++;
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e) {

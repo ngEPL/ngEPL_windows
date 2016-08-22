@@ -171,15 +171,15 @@ namespace NewEPL {
     }
 
     class BlockList {
-        public string Name { get; set; }
+        public string Category { get; set; }
         public List<BlockData> Source { get; set; }
     }
 
     class BlockData {
-        public double Width { get; set; }
-        public double Height { get; set; }
-        public string Source { get; set; } 
-        public BlockType Tag { get; set; }
+        //public double Width { get; set; }
+        //public double Height { get; set; }
+        public BlockTemplate Template { get; set; } 
+        //public BlockType Tag { get; set; }
     }
 
     class PathAndType {

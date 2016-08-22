@@ -63,36 +63,6 @@ namespace NewEPL.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static System.Drawing.Bitmap block_arduino {
-            get {
-                object obj = ResourceManager.GetObject("block_arduino", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
-        /// </summary>
-        internal static System.Drawing.Bitmap block_if {
-            get {
-                object obj = ResourceManager.GetObject("block_if", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
-        /// </summary>
-        internal static System.Drawing.Bitmap block_q {
-            get {
-                object obj = ResourceManager.GetObject("block_q", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
-        /// </summary>
         internal static System.Drawing.Bitmap block_test_1 {
             get {
                 object obj = ResourceManager.GetObject("block_test_1", resourceCulture);
@@ -107,6 +77,18 @@ namespace NewEPL.Properties {
             get {
                 object obj = ResourceManager.GetObject("block_test_1_9", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   &lt;block name=&quot;블록3&quot; width=&quot;210&quot; height=&quot;66&quot; source=&quot;pack://siteoforigin:,,,/Resources/block_test_1.png&quot; ninepatch=&quot;pack://siteoforigin:,,,/Resources/block_test_1.9.png&quot;&gt;
+        ///	&lt;splicer x=&quot;0&quot; y=&quot;0&quot; width=&quot;0&quot; height=&quot;0&quot; type=&quot;m&quot;/&gt;
+        ///	&lt;splicer x=&quot;0&quot; y=&quot;0&quot; width=&quot;0&quot; height=&quot;0&quot; type=&quot;f&quot;/&gt;
+        ///&lt;/block&gt;과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string block_test_11 {
+            get {
+                return ResourceManager.GetString("block_test_11", resourceCulture);
             }
         }
         
@@ -167,6 +149,25 @@ namespace NewEPL.Properties {
             get {
                 object obj = ResourceManager.GetObject("block_test_4_9", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   &lt;?xml version=&apos;1.0&apos; ?&gt;
+        ///&lt;blockdata&gt;
+        ///  &lt;head&gt;
+        ///    &lt;ratio value=&quot;0.8&quot;/&gt;
+        ///  &lt;/head&gt;
+        ///  &lt;body&gt;
+        ///    &lt;category name=&quot;議곌굔&quot;&gt;
+        ///      &lt;block name=&quot;釉붾줉3&quot; width=&quot;210&quot; height=&quot;66&quot; source=&quot;pack://siteoforigin:,,,/Resources/block_test_3.png&quot; ninepatch=&quot;pack://siteoforigin:,,,/Resources/block_test_3.9.png&quot;&gt;
+        ///        &lt;splicer x=&quot;0&quot; y=&quot;0&quot; width=&quot;0&quot; height=&quot;0&quot; type=&quot;m&quot;/&gt;
+        ///      &lt;/block&gt;
+        ///      &lt;block name=&quot;釉붾줉1&quot; width=&quot;210&quot; height=&quot;66&quot; source=&quot;pack://siteoforigin:,,,/Resources/block_test_1.png&quot; ninepatch=&quot;pack://siteoforig[나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string BlockData {
+            get {
+                return ResourceManager.GetString("BlockData", resourceCulture);
             }
         }
     }

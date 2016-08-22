@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace NewEPL {
-    class NinePatch {
+     class NinePatch {
 
         private ImageSource Source;
 
@@ -71,7 +67,6 @@ namespace NewEPL {
                 return src;
             }
 
-            WriteableBitmap ret = new WriteableBitmap(targetWidth, targetHeight, 96, 96, PixelFormats.Bgra32, null);
             byte[] srcPixels = new byte[targetHeight * targetWidth * BYTES_PER_PIXEL];
             byte[] pixelsId = new byte[targetHeight * targetWidth * BYTES_PER_PIXEL];
 
@@ -90,6 +85,8 @@ namespace NewEPL {
             }   
 
             int stride = BYTES_PER_PIXEL * targetWidth;
+
+            var ret = new WriteableBitmap(targetWidth, targetHeight, 96, 96, PixelFormats.Bgra32, null);//WriteableBitmap.Create(targetWidth, targetHeight, 96, 96, PixelFormats.Bgra32, null, pixelsId, stride);
             ret.WritePixels(new Int32Rect(0, 0, targetWidth, targetHeight), pixelsId, stride, 0);
 
             Cache.Add(String.Format("{0}x{1}", targetWidth, targetHeight), ret);

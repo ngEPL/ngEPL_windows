@@ -58,10 +58,10 @@
                         <StackPanel Orientation="Horizontal">
                             <DockPanel>
                                 <Border DockPanel.Dock="Top">
-                                    <TextBlock Text="{Binding Name}" FontSize="18" HorizontalAlignment="Center" Margin="0, 0, 0, 5"></TextBlock>
+                                    <TextBlock Text="{Binding Category}" FontSize="18" HorizontalAlignment="Center" Margin="0, 0, 0, 5"></TextBlock>
                                 </Border>
                                 <Border DockPanel.Dock="Top" Margin="0, 0, 0, 15">
-                                    <ListBox ItemsSource="{Binding Source}" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Hidden" extensions:ListboxExtensions.IgnoreScroll="True">
+                                    <ListBox ItemsSource="{Binding Source}" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Hidden" local:ListboxExtensions.IgnoreScroll="True">
                                         <ListBox.ItemContainerStyle>
                                             <Style TargetType="ListBoxItem">
                                                 <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
@@ -79,7 +79,8 @@
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel>
-                                                    <Image Width="{Binding Width}" Height="{Binding Height}" Source="{Binding Source}" Tag="{Binding Tag}" MouseLeftButtonDown="image_Drag" GiveFeedback="Image_GiveFeedback"/>
+                                                    <local:BlockTemplate Content="{Binding Template}" MouseLeftButtonDown="block_Drag"/>
+                                                    <!--<Image Width="{Binding Width}" Height="{Binding Height}" Source="{Binding Source}" Tag="{Binding Tag}" MouseLeftButtonDown="image_Drag" GiveFeedback="Image_GiveFeedback"/>-->
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
