@@ -35,19 +35,19 @@ namespace NewEPL {
             //block.GetAttribute("name");
 
             var blocks_if = new List<BlockData>();
+            blocks_if.Add(new BlockData() { Template = new BlockTest3() });
             blocks_if.Add(new BlockData() { Template = new BlockTest1() });
-            blocks_if.Add(new BlockData() { Template = new BlockTest1() });
-            blocks_if.Add(new BlockData() { Template = new BlockTest1() });
+            blocks_if.Add(new BlockData() { Template = new BlockTest2() });
 
             var blocks_for = new List<BlockData>();
-            blocks_for.Add(new BlockData() { Template = new BlockTest1() });
+            blocks_for.Add(new BlockData() { Template = new BlockTest4() });
 
             var blocks_text = new List<BlockData>();
 
             var blocks_list = new List<BlockData>();
 
             var blocks_microbit = new List<BlockData>();
-
+                
             var blocks_arduino = new List<BlockData>();
 
             ToggleList.Add(new BlockList() { Category = "조건", Source = blocks_if });
@@ -75,6 +75,7 @@ namespace NewEPL {
 
         private void block_Drag(object sender, MouseButtonEventArgs e) {
             var block = sender as BlockTemplate;
+
             var data = new DataObject(typeof(BlockTemplate), BlockTemplate.CreateBlock(block));
             DragDrop.DoDragDrop(block, data, DragDropEffects.Copy);
         }
@@ -112,6 +113,14 @@ namespace NewEPL {
             ToggleCheck(Toggle_list, true);
             ToggleCheck(Toggle_microbit, true);
             ToggleCheck(Toggle_arduino, true);
+
+        
+            var copy = new BlockTemplate();
+            Canvas.SetLeft(copy, 100);
+            Canvas.SetTop(copy, 200);
+            copy.Content = new BlockTest1();
+
+            this.canvas.Children.Add(copy);
         }
 
         private void ToggleCheck(ToggleButton btn, bool v) {

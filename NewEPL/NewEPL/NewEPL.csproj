@@ -58,7 +58,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="BlockTest1.xaml">
+    <Page Include="Block\BlockTest4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Block\BlockTest3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Block\BlockTest2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Block\BlockTest1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -71,8 +83,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Block.cs" />
-    <Compile Include="BlockTemplate.cs" />
-    <Compile Include="BlockTest1.xaml.cs">
+    <Compile Include="Block\BlockTemplate.cs" />
+    <Compile Include="Block\BlockTest4.xaml.cs">
+      <DependentUpon>BlockTest4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Block\BlockTest3.xaml.cs">
+      <DependentUpon>BlockTest3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Block\BlockTest2.xaml.cs">
+      <DependentUpon>BlockTest2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Block\BlockTest1.xaml.cs">
       <DependentUpon>BlockTest1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Image9.cs" />

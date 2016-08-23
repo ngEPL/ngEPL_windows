@@ -1,0 +1,17 @@
+﻿<local:BlockTemplate x:Class="NewEPL.BlockTest4"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NewEPL"
+             mc:Ignorable="d" 
+             d:DesignHeight="103" d:DesignWidth="105">
+    <Grid>
+        <local:Image9 Source="pack://siteoforigin:,,,/Resources/block_test_4.9.png" DefaultWidth="280" DefaultHeight="160" SourceUrl="pack://siteoforigin:,,,/Resources/block_test_4.9.png" />
+        <Canvas>
+            <Rectangle Width="47" Height="8"/>
+            <Rectangle Width="47" Height="8" Canvas.Left="40" Canvas.Top="50"/>
+            <Rectangle Width="47" Height="8" Canvas.Top="95"/>
+        </Canvas>
+    </Grid>
+</local:BlockTemplate>
