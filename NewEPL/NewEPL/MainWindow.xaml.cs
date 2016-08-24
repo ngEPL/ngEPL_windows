@@ -75,16 +75,16 @@ namespace NewEPL {
 
         private void block_Drag(object sender, MouseButtonEventArgs e) {
             var block = sender as BlockTemplate;
-
-            var data = new DataObject(typeof(BlockTemplate), BlockTemplate.CreateBlock(block));
+            var clone = BlockTemplate.CreateBlock((BlockTemplate)block.Content);
+            var data = new DataObject(typeof(BlockTemplate), clone);
             DragDrop.DoDragDrop(block, data, DragDropEffects.Copy);
         }
 
         private void canvas_Drop(object sender, DragEventArgs e) {
             var data = e.Data.GetData(typeof(BlockTemplate)) as BlockTemplate;
             var copy = new BlockTemplate();
-            Canvas.SetLeft(copy, e.GetPosition(canvas).X);
-            Canvas.SetTop(copy, e.GetPosition(canvas).Y);
+            copy.X = e.GetPosition(canvas).X;
+            copy.Y = e.GetPosition(canvas).Y;
             copy.Content = data;
             this.canvas.Children.Add(copy);
             //var copy = new Block(data.Source, e.GetPosition(this.canvas).X, e.GetPosition(this.canvas).Y, data.Width, data.Height, data.Tag);
@@ -113,14 +113,6 @@ namespace NewEPL {
             ToggleCheck(Toggle_list, true);
             ToggleCheck(Toggle_microbit, true);
             ToggleCheck(Toggle_arduino, true);
-
-        
-            var copy = new BlockTemplate();
-            Canvas.SetLeft(copy, 100);
-            Canvas.SetTop(copy, 200);
-            copy.Content = new BlockTest1();
-
-            this.canvas.Children.Add(copy);
         }
 
         private void ToggleCheck(ToggleButton btn, bool v) {

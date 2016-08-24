@@ -79,7 +79,7 @@
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel>
-                                                    <local:BlockTemplate Content="{Binding Template}" MouseLeftButtonDown="block_Drag"/>
+                                                    <local:BlockTemplate Content="{Binding Template}" PreviewMouseLeftButtonDown="block_Drag"/>
                                                     <!--<Image Width="{Binding Width}" Height="{Binding Height}" Source="{Binding Source}" Tag="{Binding Tag}" MouseLeftButtonDown="image_Drag" GiveFeedback="Image_GiveFeedback"/>-->
                                                 </StackPanel>
                                             </DataTemplate>

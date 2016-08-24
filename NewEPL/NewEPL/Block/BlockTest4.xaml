@@ -7,7 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="103" d:DesignWidth="105">
     <Grid>
-        <local:Image9 Source="pack://siteoforigin:,,,/Resources/block_test_4.9.png" DefaultWidth="280" DefaultHeight="160" SourceUrl="pack://siteoforigin:,,,/Resources/block_test_4.9.png" />
+        <Thumb>
+            <Thumb.Template>
+                <ControlTemplate>
+                    <local:Image9 Source="pack://siteoforigin:,,,/Resources/block_test_4.9.png" DefaultWidth="280" DefaultHeight="160" SourceUrl="pack://siteoforigin:,,,/Resources/block_test_4.9.png" />
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>
         <Canvas>
             <Rectangle Width="47" Height="8"/>
             <Rectangle Width="47" Height="8" Canvas.Left="40" Canvas.Top="50"/>
