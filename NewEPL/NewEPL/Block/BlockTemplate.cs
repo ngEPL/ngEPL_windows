@@ -33,19 +33,21 @@ namespace NewEPL {
             var thumb = (Thumb)VisualTreeHelper.GetChild((DependencyObject)ret.Content, 0);
             var canvas = (Canvas)VisualTreeHelper.GetChild((DependencyObject)ret.Content, 1);
 
+            ret.Width = b.Width;
+
             thumb.ApplyTemplate();
-
-            var image = (Image9)thumb.Template.FindName("image", thumb);
-
             thumb.DragDelta += Thumb_DragDelta;
 
+            var image = (Image9)thumb.Template.FindName("image", thumb);
             foreach (var i in canvas.Children) {
                 var border = i as Border;
-                Canvas.SetTop(border, Canvas.GetTop(border) + image.DefaultHeight - 16);
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
-                //var a = (Image9)thumb.GetTemplateChild();
-                //thumb.Template.CHild
-                //MessageBox.Show(((Image9)VisualTreeHelper.GetChild(thumb as DependencyObject, 0)).ToString());
+                Canvas.SetLeft(border, (Canvas.GetLeft(border) + (image.Patch.GetImmutableWidth(splicer.XX) + image.Patch.GetStrectedWidth(image.DefaultWidth)) * splicer.XX) * 0.8);
+                Canvas.SetTop(border, (Canvas.GetTop(border) + (image.Patch.GetImmutableHeight(splicer.XX) + image.Patch.GetStrectedHeight(image.DefaultHeight)) * splicer.XX) * 0.8);
+
+                if (Double.IsNaN(splicer.Width)) {
+                    splicer.Width = ret.Width + splicer.RelativeWidth * 0.8; /// 0.8 -> 배율
+                }
             }
 
             return ret;
@@ -55,6 +57,10 @@ namespace NewEPL {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
             b.X += e.HorizontalChange;
             b.Y += e.VerticalChange;
+
+            var canvas = (b.Parent as Canvas);
+            b.X = Math.Min(Math.Max(0, b.X), canvas.ActualWidth - b.ActualWidth);
+            b.Y = Math.Min(Math.Max(0, b.Y), canvas.ActualHeight - b.ActualHeight);
         }
     }
 }

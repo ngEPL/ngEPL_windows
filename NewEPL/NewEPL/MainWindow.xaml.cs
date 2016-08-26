@@ -35,12 +35,12 @@ namespace NewEPL {
             //block.GetAttribute("name");
 
             var blocks_if = new List<BlockData>();
-            blocks_if.Add(new BlockData() { Template = new BlockTest3() });
-            blocks_if.Add(new BlockData() { Template = new BlockTest1() });
-            blocks_if.Add(new BlockData() { Template = new BlockTest2() });
+            blocks_if.Add(new BlockData() { Template = new BlockTest3() { Width=210 * 0.8 } });
+            blocks_if.Add(new BlockData() { Template = new BlockTest1() { Width=210 * 0.8} });
+            blocks_if.Add(new BlockData() { Template = new BlockTest2() { Width = 210 * 0.8 } });
 
             var blocks_for = new List<BlockData>();
-            blocks_for.Add(new BlockData() { Template = new BlockTest4() });
+            blocks_for.Add(new BlockData() { Template = new BlockTest4() { Width=280 * 0.8 } });
 
             var blocks_text = new List<BlockData>();
 

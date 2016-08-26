@@ -15,11 +15,11 @@
             </Thumb.Template>
         </Thumb>
         <Canvas>
-            <Border BorderBrush="Red" BorderThickness="1">
-                <local:Splicer Width="47" Height="8" Type="False"/>
+            <Border BorderBrush="Red" BorderThickness="1" Canvas.Top="0">
+                <local:Splicer Width="NaN" Height="8" Type="False" XX="0"/>
             </Border>
-            <Border BorderBrush="Red" BorderThickness="1" Canvas.Top="9">
-                <local:Splicer Width="47" Height="8" Type="True"/>
+            <Border BorderBrush="Red" BorderThickness="1" Canvas.Top="0">
+                <local:Splicer Width="NaN" Height="8" Type="True" XX="1"/>
             </Border>
         </Canvas>
     </Grid>

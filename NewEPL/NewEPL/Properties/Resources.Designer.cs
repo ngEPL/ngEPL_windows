@@ -81,8 +81,8 @@ namespace NewEPL.Properties {
         }
         
         /// <summary>
-        ///   &lt;block name=&quot;블록3&quot; width=&quot;210&quot; height=&quot;66&quot; source=&quot;pack://siteoforigin:,,,/Resources/block_test_1.png&quot; ninepatch=&quot;pack://siteoforigin:,,,/Resources/block_test_1.9.png&quot;&gt;
-        ///	&lt;splicer x=&quot;0&quot; y=&quot;0&quot; width=&quot;0&quot; height=&quot;0&quot; type=&quot;m&quot;/&gt;
+        ///   &lt;block name=&quot;釉붾줉3&quot; width=&quot;210&quot; height=&quot;66&quot; source=&quot;pack://siteoforigin:,,,/Resources/block_test_1.png&quot; ninepatch=&quot;pack://siteoforigin:,,,/Resources/block_test_1.9.png&quot;&gt;
+        ///  &lt;splicer x=&quot;0&quot; y=&quot;0&quot; width=&quot;0&quot; height=&quot;0&quot; type=&quot;m&quot;/&gt;
         ///	&lt;splicer x=&quot;0&quot; y=&quot;0&quot; width=&quot;0&quot; height=&quot;0&quot; type=&quot;f&quot;/&gt;
         ///&lt;/block&gt;과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>

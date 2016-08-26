@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace NewEPL {
-     class NinePatch {
+     public class NinePatch {
 
         private ImageSource Source;
 
@@ -32,6 +32,7 @@ namespace NewEPL {
         private Dictionary<string, ImageSource> Cache = new Dictionary<string, ImageSource>();
 
         private List<int> TopPatches, LeftPatches, BottomPatches, RightPatches;
+        private List<int> WidthRegions, HeightRegions;
 
         private const int BYTES_PER_PIXEL = 4;
 
@@ -75,6 +76,7 @@ namespace NewEPL {
 
             int index = 0;
             src.CopyPixels(srcPixels, targetWidth * BYTES_PER_PIXEL, 0);
+
             for (int row = 0; row < targetHeight; row++) {
                 int sourceY = yMapping[row];
                 for (int col = 0; col < targetWidth; col++) {
@@ -94,25 +96,64 @@ namespace NewEPL {
             return ret;
         }
 
+        public int GetImmutableWidth(int idx) {
+            return WidthRegions[idx];
+        }
+
+        public int GetImmutableHeight(int idx) {
+            return HeightRegions[idx];
+        }
+
+        public int GetStrectedWidth(int width) {
+            int ret = 0;
+            foreach(var i in WidthRegions) {
+                ret += i;
+            }
+
+            return width - ret;
+        }
+
+        public int GetStrectedHeight(int height) {
+            int ret = 0;
+            foreach (var i in HeightRegions) {
+                ret += i;
+            }
+
+            return height - ret;
+        }
+
         private void FindPatchRegion() {
             TopPatches = new List<int>();
             LeftPatches = new List<int>();
             BottomPatches = new List<int>();
             RightPatches = new List<int>();
 
+            WidthRegions = new List<int>();
+            HeightRegions = new List<int>();
+
             BitmapSource src = Source as BitmapSource;
             byte[] srcPixels = new byte[src.PixelWidth *src.PixelHeight * BYTES_PER_PIXEL];
             src.CopyPixels(srcPixels, (src.PixelWidth * src.Format.BitsPerPixel + 7) / 8, 0);
 
             // Top
+            int count = 0;
+            WidthRegions.Add(count);
             for (int x = 1; x < src.PixelWidth - 1; x++) {
                 if(srcPixels[0 * src.PixelWidth * BYTES_PER_PIXEL + x * BYTES_PER_PIXEL + 0] == 0 &&
                     srcPixels[0 * src.PixelWidth * BYTES_PER_PIXEL + x * BYTES_PER_PIXEL + 1] == 0 &&
                     srcPixels[0 * src.PixelWidth * BYTES_PER_PIXEL + x * BYTES_PER_PIXEL + 2] == 0 &&
                     srcPixels[0 * src.PixelWidth * BYTES_PER_PIXEL + x * BYTES_PER_PIXEL + 3] == 255) { 
                     TopPatches.Add(x - 1);
+                    WidthRegions.Add(count);
+                    count = 0;
+                } else {
+                    count += 1;
                 }
             }
+            WidthRegions.Add(count);
+
+            count = 0;
+            HeightRegions.Add(count);
             // Left
             for (int y = 1; y < src.PixelHeight - 1; y++) {
                 if (srcPixels[y * src.PixelWidth * BYTES_PER_PIXEL + 0 * BYTES_PER_PIXEL + 0] == 0 &&
@@ -120,8 +161,13 @@ namespace NewEPL {
                     srcPixels[y * src.PixelWidth * BYTES_PER_PIXEL + 0 * BYTES_PER_PIXEL + 2] == 0 &&
                     srcPixels[y * src.PixelWidth * BYTES_PER_PIXEL + 0 * BYTES_PER_PIXEL + 3] == 255) {
                     LeftPatches.Add(y - 1);
+                    HeightRegions.Add(count);
+                    count = 0;
+                } else {
+                    count += 1;
                 }
             }
+            HeightRegions.Add(count);
             // Bottom
             for (int x = 1; x < src.PixelWidth - 1; x++) {
                 if (srcPixels[(src.PixelHeight - 1) * src.PixelWidth * BYTES_PER_PIXEL + x * BYTES_PER_PIXEL + 0] == 0 &&

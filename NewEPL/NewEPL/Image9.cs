@@ -7,7 +7,7 @@ namespace NewEPL {
         public static readonly DependencyProperty DefaultHeightProperty;
         public static readonly DependencyProperty SourceUrlProperty;
 
-        NinePatch Patch;
+        public NinePatch Patch;
 
         static Image9() {
             DefaultWidthProperty = DependencyProperty.Register("DefaultWidth", typeof(int), typeof(Image9), new UIPropertyMetadata(null));

@@ -10,12 +10,14 @@
         <Thumb>
             <Thumb.Template>
                 <ControlTemplate>
-                    <local:Image9 Source="pack://siteoforigin:,,,/Resources/block_test_3.9.png" DefaultWidth="210" DefaultHeight="66" SourceUrl="pack://siteoforigin:,,,/Resources/block_test_3.9.png" />
+                    <local:Image9 x:Name="image" Source="pack://siteoforigin:,,,/Resources/block_test_3.9.png" DefaultWidth="210" DefaultHeight="66" SourceUrl="pack://siteoforigin:,,,/Resources/block_test_3.9.png" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
         <Canvas>
-            <Rectangle Width="47" Height="8" Canvas.Top="9"/>
+            <Border BorderBrush="Red" BorderThickness="1" Canvas.Top="0">
+                <local:Splicer Width="NaN" Height="8" Type="True" XX="1"/>
+            </Border>
         </Canvas>
     </Grid>
 </local:BlockTemplate>
