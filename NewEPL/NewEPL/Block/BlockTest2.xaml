@@ -15,8 +15,8 @@
             </Thumb.Template>
         </Thumb>
         <Canvas>
-            <Border BorderBrush="Red" BorderThickness="1">
-                <local:Splicer Width="NaN" Height="8" Type="False" XX="0"/>
+            <Border BorderBrush="Red" BorderThickness="1" Canvas.Left="0" Canvas.Top="0">
+                <local:Splicer Width="NaN" Height="12" Type="False" XX="0"/>
             </Border>
         </Canvas>
     </Grid>

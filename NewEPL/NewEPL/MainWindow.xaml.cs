@@ -18,21 +18,12 @@ namespace NewEPL {
     /// </summary>
     public partial class MainWindow : Window {
         List<BlockList> ToggleList;
-        Rectangle TestPreview;
-
-        int TestCount = 0;
-
-        int ZIndexManager = 0;
+        public Rectangle TestPreview;
 
         public MainWindow() {
             InitializeComponent();
 
             ToggleList = new List<BlockList>();
-
-            //XmlDocument doc = new XmlDocument();
-            //doc.Load(AppDomain.CurrentDomain.BaseDirectory + "/Resources/block_test_1.xml");
-            //var block = doc.SelectSingleNode("/")["block"];
-            //block.GetAttribute("name");
 
             var blocks_if = new List<BlockData>();
             blocks_if.Add(new BlockData() { Template = new BlockTest3() { Width=210 * 0.8 } });
@@ -87,13 +78,6 @@ namespace NewEPL {
             copy.Y = e.GetPosition(canvas).Y;
             copy.Content = data;
             this.canvas.Children.Add(copy);
-            //var copy = new Block(data.Source, e.GetPosition(this.canvas).X, e.GetPosition(this.canvas).Y, data.Width, data.Height, data.Tag);
-            //copy.DragStarted += Thumb_DragStarted;
-            //copy.DragDelta += Thumb_DragDelta;
-            //copy.DragCompleted += Thumb_DragCompleted;
-            //Canvas.SetZIndex(copy, ZIndexManager++);
-            //this.canvas.Children.Add(copy);
-            //copy.TestNum = TestCount++;
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e) {
@@ -122,17 +106,6 @@ namespace NewEPL {
                 btn.IsChecked = false;
                 ToggleButton_Unchecked(btn, null);
             }
-        }
-
-        private void Image_GiveFeedback(object sender, GiveFeedbackEventArgs e) {
-        }
-
-        private void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
-            var b = sender as Block;
-
-            /// 이프문 블럭같은 경우 이프문 안쪽에 들어가는 블록이 존재하는데 
-            /// 이프문의 zindex가 안쪽의 블록보다 높을 경우 안쪽의 블록을 선택할 수 없는 문제가 있음.
-            Canvas.SetZIndex(b, 1000000);
         }
 
         private void Thumb_DragDelta(object sender, DragDeltaEventArgs e) {

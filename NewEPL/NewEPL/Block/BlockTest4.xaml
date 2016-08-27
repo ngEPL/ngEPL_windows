@@ -10,19 +10,19 @@
         <Thumb>
             <Thumb.Template>
                 <ControlTemplate>
-                    <local:Image9 x:Name="image" Source="pack://siteoforigin:,,,/Resources/block_test_4.9.png" DefaultWidth="280" DefaultHeight="160" SourceUrl="pack://siteoforigin:,,,/Resources/block_test_4.9.png" />
+                    <local:Image9 x:Name="image" Source="pack://siteoforigin:,,,/Resources/block_test_4.9.png" DefaultWidth="280" DefaultHeight="120" SourceUrl="pack://siteoforigin:,,,/Resources/block_test_4.9.png" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
         <Canvas>
-            <Border BorderBrush="Red" BorderThickness="1">
-                <local:Splicer Width="NaN" Height="8" Type="False" XX="0"/>
+            <Border BorderBrush="Red" BorderThickness="1" Canvas.Left="0" Canvas.Top="0">
+                <local:Splicer Width="NaN" Height="12" Type="False" XX="0"/>
             </Border>
-            <Border BorderBrush="Red" BorderThickness="1"  Canvas.Left="38" Canvas.Top="50">
-                <local:Splicer Width="NaN" RelativeWidth="-38" Height="8" Type="True" XX="0"/>
+            <Border BorderBrush="Red" BorderThickness="1" Canvas.Left="38" Canvas.Top="50">
+                <local:Splicer Width="NaN" RelativeWidth="-38" Height="12" Type="True" XX="0"/>
             </Border>
-            <Border BorderBrush="Red" BorderThickness="1"  Canvas.Top="37">
-                <local:Splicer Width="NaN" RelativeWidth="-16" Height="8" Type="True" XX="1"/>
+            <Border BorderBrush="Red" BorderThickness="1" Canvas.Left="0" Canvas.Top="37">
+                <local:Splicer Width="NaN" RelativeWidth="-16" Height="12" Type="True" XX="1"/>
             </Border>
         </Canvas>
     </Grid>
