@@ -8,14 +8,30 @@ using System.Windows.Controls;
 
 namespace NewEPL {
     class Splicer : Control {
+        public static readonly DependencyProperty XProperty;
+        public static readonly DependencyProperty YProperty;
         public static readonly DependencyProperty RelativeWidthProperty;
         public static readonly DependencyProperty TypeProperty;
-        public static readonly DependencyProperty XXProperty;
+        public static readonly DependencyProperty XStackProperty;
+        public static readonly DependencyProperty YStackProperty;
 
         static Splicer() {
+            XProperty = DependencyProperty.Register("X", typeof(double), typeof(Image9), new UIPropertyMetadata(null));
+            YProperty = DependencyProperty.Register("Y", typeof(double), typeof(Image9), new UIPropertyMetadata(null));
             RelativeWidthProperty = DependencyProperty.Register("RelativeWidth", typeof(int), typeof(Image9), new UIPropertyMetadata(null));
             TypeProperty = DependencyProperty.Register("Type", typeof(bool), typeof(Image9), new UIPropertyMetadata(null));
-            XXProperty = DependencyProperty.Register("XX", typeof(int), typeof(Image9), new UIPropertyMetadata(null));
+            XStackProperty = DependencyProperty.Register("XStack", typeof(int), typeof(Image9), new UIPropertyMetadata(null));
+            YStackProperty = DependencyProperty.Register("YStack", typeof(int), typeof(Image9), new UIPropertyMetadata(null));
+        }
+
+        public double X {
+            get { return (double)GetValue(XProperty); }
+            set { SetValue(XProperty, value); }
+        }
+
+        public double Y {
+            get { return (double)GetValue(YProperty); }
+            set { SetValue(YProperty, value); }
         }
 
         public int RelativeWidth {
@@ -28,9 +44,14 @@ namespace NewEPL {
             set { SetValue(TypeProperty, value); }
         }
 
-        public int XX {
-            get { return (int)GetValue(XXProperty); }
-            set { SetValue(XXProperty, value); }
+        public int XStack {
+            get { return (int)GetValue(XStackProperty); }
+            set { SetValue(XStackProperty, value); }
+        }
+
+        public int YStack {
+            get { return (int)GetValue(YStackProperty); }
+            set { SetValue(YStackProperty, value); }
         }
     }
 }

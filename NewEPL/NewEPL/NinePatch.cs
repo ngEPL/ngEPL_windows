@@ -31,19 +31,19 @@ namespace NewEPL {
 
         private Dictionary<string, ImageSource> Cache = new Dictionary<string, ImageSource>();
 
-        private List<int> TopPatches, LeftPatches, BottomPatches, RightPatches;
-        private List<int> WidthRegions, HeightRegions;
+        private List<int> TopPatches = new List<int>(), LeftPatches = new List<int>(), BottomPatches = new List<int>(), RightPatches = new List<int>();
+        private List<int> WidthRegions = new List<int>(), HeightRegions = new List<int>();
 
         private const int BYTES_PER_PIXEL = 4;
 
+        public int Width, Height;
+
         public NinePatch(ImageSource src) {
             Source = src;
-            FindPatchRegion();
         }
 
         public NinePatch(string path) {
             Source = new BitmapImage(new Uri(path));
-            FindPatchRegion();
         }
 
         public void ClearCache() {
@@ -51,9 +51,20 @@ namespace NewEPL {
         }
 
         public ImageSource GetPatchedImage(int width, int height) {
+            Width = width;
+            Height = height;
             if (Cache.ContainsKey(String.Format("{0}x{1}", width, height))) {
                 return Cache[String.Format("{0}x{1}", width, height)];
             }
+
+            TopPatches.Clear();
+            LeftPatches.Clear();
+            BottomPatches.Clear();
+            RightPatches.Clear();
+            WidthRegions.Clear();
+            HeightRegions.Clear();
+
+            FindPatchRegion();
 
             var src = (BitmapSource)Original;
 
@@ -123,14 +134,6 @@ namespace NewEPL {
         }
 
         private void FindPatchRegion() {
-            TopPatches = new List<int>();
-            LeftPatches = new List<int>();
-            BottomPatches = new List<int>();
-            RightPatches = new List<int>();
-
-            WidthRegions = new List<int>();
-            HeightRegions = new List<int>();
-
             BitmapSource src = Source as BitmapSource;
             byte[] srcPixels = new byte[src.PixelWidth *src.PixelHeight * BYTES_PER_PIXEL];
             src.CopyPixels(srcPixels, (src.PixelWidth * src.Format.BitsPerPixel + 7) / 8, 0);

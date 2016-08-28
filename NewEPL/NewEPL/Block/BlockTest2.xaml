@@ -16,7 +16,7 @@
         </Thumb>
         <Canvas>
             <Border BorderBrush="Red" BorderThickness="1" Canvas.Left="0" Canvas.Top="0">
-                <local:Splicer Width="NaN" Height="12" Type="False" XX="0"/>
+                <local:Splicer Width="NaN" Height="12" Type="False" X="0" Y="0"  YStack="0"/>
             </Border>
         </Canvas>
     </Grid>

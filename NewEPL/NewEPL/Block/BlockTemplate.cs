@@ -39,8 +39,8 @@ namespace NewEPL {
 
         public static BlockTemplate CreateBlock(BlockTemplate b) {
             var ret = (BlockTemplate)Activator.CreateInstance(b.GetType());
-            var thumb = (Thumb)VisualTreeHelper.GetChild((DependencyObject)ret.Content, 0);
-            var canvas = (Canvas)VisualTreeHelper.GetChild((DependencyObject)ret.Content, 1);
+            var thumb = ret.GetThumb();
+            var canvas = ret.GetCanvas();
 
             ret.Width = b.Width;
 
@@ -50,7 +50,19 @@ namespace NewEPL {
             thumb.DragCompleted += Thumb_DragCompleted;
 
             var image = (Image9)thumb.Template.FindName("image", thumb);
-            ret.UpdateSplicer(image);
+            foreach (var i in canvas.Children) {
+                var border = i as Border;
+                var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
+                Canvas.SetLeft(border, (splicer.X + (image.Patch.GetImmutableWidth(0) + image.Patch.GetStrectedWidth(image.DefaultWidth)) * 0) * 0.8);
+                Canvas.SetTop(border, (splicer.Y + (image.Patch.GetImmutableHeight(splicer.YStack) + image.Patch.GetStrectedHeight(image.DefaultHeight)) * splicer.YStack) * 0.8);
+
+                splicer.X *= 0.8;
+                splicer.Y *= 0.8;
+
+                if (Double.IsNaN(splicer.Width)) {
+                    splicer.Width = ret.Width + splicer.RelativeWidth * 0.8; /// 0.8 -> 배율
+                }
+            }
 
             return ret;
         }
@@ -72,6 +84,18 @@ namespace NewEPL {
             child.DifY = -(this.Y - child.Y);
         }
 
+        private Thumb GetThumb() {
+            if (this.GetType() == typeof(BlockTemplate))
+                return (Thumb)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 0);
+            return (Thumb)VisualTreeHelper.GetChild((DependencyObject)Content, 0);
+        }
+
+        private Canvas GetCanvas() {
+            if (this.GetType() == typeof(BlockTemplate))
+                return (Canvas)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 1);
+            return (Canvas)VisualTreeHelper.GetChild((DependencyObject)Content, 1);
+        }
+
         private Splicer GetSplicer(int idx) {
             var canvas = (Canvas)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 1);
             return (Splicer)VisualTreeHelper.GetChild(canvas.Children[idx] as DependencyObject, 0);
@@ -84,7 +108,7 @@ namespace NewEPL {
         /// <returns></returns>
         private List<Border> GetSplicers(int what) {
             List<Border> ret = new List<Border>();
-            var canvas = (Canvas)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 1);
+            var canvas = GetCanvas();
 
             foreach(var i in canvas.Children) {
                 var border = (Border)i;//(Border)VisualTreeHelper.GetChild(i as DependencyObject, 0);
@@ -96,13 +120,13 @@ namespace NewEPL {
             return ret;
         }
 
-        private void UpdateSplicer(Image9 image) {
-            var canvas = (Canvas)VisualTreeHelper.GetChild((DependencyObject)Content, 1);
+        private void UpdateSplicer(Image9 image, int width, int height) {
+            var canvas = GetCanvas();
             foreach (var i in canvas.Children) {
                 var border = i as Border;
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
-                Canvas.SetLeft(border, (Canvas.GetLeft(border) + (image.Patch.GetImmutableWidth(0) + image.Patch.GetStrectedWidth(image.DefaultWidth)) * 0) * 0.8);
-                Canvas.SetTop(border, (Canvas.GetTop(border) + (image.Patch.GetImmutableHeight(splicer.XX) + image.Patch.GetStrectedHeight(image.DefaultHeight)) * splicer.XX) * 0.8);
+                Canvas.SetLeft(border, (splicer.X + (image.Patch.GetImmutableWidth(0) + image.Patch.GetStrectedWidth(width)) * 0));
+                Canvas.SetTop(border, (splicer.Y + (image.Patch.GetImmutableHeight(splicer.YStack) + image.Patch.GetStrectedHeight(height)) * splicer.YStack * 0.8));
 
                 if (Double.IsNaN(splicer.Width)) {
                     splicer.Width = Width + splicer.RelativeWidth * 0.8; /// 0.8 -> 배율
@@ -113,6 +137,25 @@ namespace NewEPL {
         private Rect GetBoundingBox(Border border) {
             var splicer = (Splicer)VisualTreeHelper.GetChild(border, 0);
             return new Rect(X + Canvas.GetLeft(border), Y + Canvas.GetTop(border), splicer.Width, splicer.Height);
+        }
+        
+        protected virtual void Resize(double width, double height) {
+            var thumb = GetThumb();
+            var image = (Image9)thumb.Template.FindName("image", thumb);
+
+            double w = width;
+            double h = height;
+
+            if (Double.IsNaN(width)) {
+                w = image.Patch.Width;
+            }
+            if (Double.IsNaN(height)) {
+                h = image.Patch.Height;
+            }
+
+            image.Source = image.Patch.GetPatchedImage((int)w, (int)h);
+
+            UpdateSplicer(image, (int)w, (int)h);
         }
 
         private static void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
@@ -130,7 +173,12 @@ namespace NewEPL {
 
             b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
 
-            foreach(var i in b.Main.canvas.Children) {
+            if (b.BlockParent != null) {
+                b.BlockParent.BlockChildren.Remove(b);
+                b.BlockParent = null;
+            }
+
+            foreach (var i in b.Main.canvas.Children) {
                 if (i.GetType() != typeof(BlockTemplate)) continue;
                 if (i.Equals(b)) continue;
 
@@ -175,6 +223,11 @@ namespace NewEPL {
                     if (b.GetBoundingBox(thisBorder).IntersectsWith(other.GetBoundingBox(otherBorder))) {
                         other.AddChild(b, j);
                         b.Main.TestPreview.Visibility = Visibility.Hidden;
+
+                        if(other.Content.GetType() == typeof(BlockTest4)) {
+                            //(other.Content as BlockTest4);
+                            //other.Resize(Double.NaN, other.ActualHeight);
+                        }
                     }
                 }
             }

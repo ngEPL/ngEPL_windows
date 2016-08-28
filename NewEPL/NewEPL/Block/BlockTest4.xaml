@@ -16,13 +16,13 @@
         </Thumb>
         <Canvas>
             <Border BorderBrush="Red" BorderThickness="1" Canvas.Left="0" Canvas.Top="0">
-                <local:Splicer Width="NaN" Height="12" Type="False" XX="0"/>
+                <local:Splicer Width="NaN" Height="12" Type="False" X="0" Y="0" YStack="0"/>
             </Border>
             <Border BorderBrush="Red" BorderThickness="1" Canvas.Left="38" Canvas.Top="50">
-                <local:Splicer Width="NaN" RelativeWidth="-38" Height="12" Type="True" XX="0"/>
+                <local:Splicer Width="NaN" RelativeWidth="-38" Height="12" Type="True" X="38" Y="50" YStack="0"/>
             </Border>
             <Border BorderBrush="Red" BorderThickness="1" Canvas.Left="0" Canvas.Top="37">
-                <local:Splicer Width="NaN" RelativeWidth="-16" Height="12" Type="True" XX="1"/>
+                <local:Splicer Width="NaN" RelativeWidth="-16" Height="12" Type="True" X="0" Y="37" YStack="1"/>
             </Border>
         </Canvas>
     </Grid>
