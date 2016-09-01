@@ -1,0 +1,23 @@
+﻿<local:BlockTemplate x:Class="NewEPL.BlockEventStart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NewEPL"
+             mc:Ignorable="d" 
+             d:DesignHeight="17" d:DesignWidth="49">
+    <Grid>
+        <Thumb>
+            <Thumb.Template>
+                <ControlTemplate>
+                    <local:Image9 x:Name="image" DefaultWidth="210" DefaultHeight="66" SourceUrl="pack://siteoforigin:,,,/Resources/block_event_start.9.png" />
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>
+        <Canvas>
+            <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
+                <local:Splicer Width="NaN" Height="12" Type="True" X="0" Y="0" YStack="1"/>
+            </Border>
+        </Canvas>
+    </Grid>
+</local:BlockTemplate>

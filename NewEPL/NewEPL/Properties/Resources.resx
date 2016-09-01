@@ -118,34 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="BlockData" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BlockData.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;ks_c_5601-1987</value>
+  <data name="block_control_if_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\block_control_if.9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="block_test_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="block_control_stop_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\block_control_stop.9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="block_test_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_1.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;ks_c_5601-1987</value>
+  <data name="block_event_start_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\block_event_start.9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="block_test_1_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_1.9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="block_test_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="block_test_2_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_2.9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="block_test_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="block_test_3_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_3.9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="block_test_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="block_test_4_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\block_test_4.9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="block_motion_move_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\block_motion_move.9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

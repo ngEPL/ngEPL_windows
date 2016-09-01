@@ -32,12 +32,12 @@
                     <RowDefinition Height="48"/>
                     <RowDefinition Height="48"/>
                 </Grid.RowDefinitions>
-                <ToggleButton x:Name="Toggle_if" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="조건" Tag="0"/>
-                <ToggleButton x:Name="Toggle_for" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="0" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="반복" Tag="1"/>
-                <ToggleButton x:Name="Toggle_text" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="1" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="텍스트" Tag="2"/>
-                <ToggleButton x:Name="Toggle_list" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="리스트" Tag="3"/>
-                <ToggleButton x:Name="Toggle_microbit" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="2" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="마이크로 비트" Tag="4"/>
-                <ToggleButton x:Name="Toggle_arduino" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="2" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="아두이노" Tag="5"/>
+                <ToggleButton x:Name="Toggle_if" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="동작" Tag="0"/>
+                <ToggleButton x:Name="Toggle_for" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="0" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="이벤트" Tag="1"/>
+                <ToggleButton x:Name="Toggle_text" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="1" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="컨트롤" Tag="2"/>
+                <ToggleButton x:Name="Toggle_list" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="제어" Tag="3"/>
+                <ToggleButton x:Name="Toggle_microbit" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="2" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="연산" Tag="4"/>
+                <ToggleButton x:Name="Toggle_arduino" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="2" IsChecked="False" ToggleButton.Checked="ToggleButton_Checked" ToggleButton.Unchecked="ToggleButton_Unchecked" Content="데이터" Tag="5"/>
             </Grid>
             <ListBox x:Name="BlockLists" HorizontalAlignment="Stretch" Grid.Row="1" BorderThickness="0" ScrollViewer.CanContentScroll="False" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                 <ListBox.ItemContainerStyle>
@@ -92,6 +92,30 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
+        <!--<TextBox>
+            <TextBox.Style>
+                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    <Style.Resources>
+                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                            <VisualBrush.Visual>
+                                <Label Content="Search" Foreground="LightGray" />
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Style.Resources>
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="Text" Value="{x:Null}">
+                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="Background" Value="White" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>-->
 
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
         <Canvas Grid.Column="2" x:Name="canvas" AllowDrop="True" Background="#00000000" Drop="canvas_Drop" >

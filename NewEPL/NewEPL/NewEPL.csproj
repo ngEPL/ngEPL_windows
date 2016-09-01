@@ -58,20 +58,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Splicer.cs" />
-    <Page Include="Block\BlockTest4.xaml">
+    <Page Include="Block\BlockControlIf.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Block\BlockTest3.xaml">
+    <Page Include="Block\BlockEventStart.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Block\BlockTest2.xaml">
+    <Page Include="Block\BlockControlStop.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Block\BlockTest1.xaml">
+    <Page Include="Block\BlockMotionMove.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -85,17 +90,17 @@
     </Compile>
     <Compile Include="Block.cs" />
     <Compile Include="Block\BlockTemplate.cs" />
-    <Compile Include="Block\BlockTest4.xaml.cs">
-      <DependentUpon>BlockTest4.xaml</DependentUpon>
+    <Compile Include="Block\BlockControlIf.xaml.cs">
+      <DependentUpon>BlockControlIf.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Block\BlockTest3.xaml.cs">
-      <DependentUpon>BlockTest3.xaml</DependentUpon>
+    <Compile Include="Block\BlockEventStart.xaml.cs">
+      <DependentUpon>BlockEventStart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Block\BlockTest2.xaml.cs">
-      <DependentUpon>BlockTest2.xaml</DependentUpon>
+    <Compile Include="Block\BlockControlStop.xaml.cs">
+      <DependentUpon>BlockControlStop.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Block\BlockTest1.xaml.cs">
-      <DependentUpon>BlockTest1.xaml</DependentUpon>
+    <Compile Include="Block\BlockMotionMove.xaml.cs">
+      <DependentUpon>BlockMotionMove.xaml</DependentUpon>
     </Compile>
     <Compile Include="Image9.cs" />
     <Compile Include="ListBoxExtensions.cs" />
@@ -109,11 +114,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -121,6 +121,7 @@
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -133,52 +134,22 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_test_1.png">
+    <None Include="Resources\block_control_if.9.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_test_2.png">
+    <None Include="Resources\block_control_stop.9.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_test_3.png">
+    <None Include="Resources\block_event_start.9.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_test_4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_test_1.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_test_2.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_test_3.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_test_4.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BlockData.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\block_test_1.xml">
+    <None Include="Resources\block_motion_move.9.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

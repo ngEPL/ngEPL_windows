@@ -137,10 +137,6 @@ namespace NewEPL {
             }
         }
 
-        //protected Splicer GetTopBlockParent() {
-
-        //}
-
         protected void UpdateSplicer(Image9 image, int width, int height) {
             var canvas = GetCanvas();
             foreach (var i in canvas.Children) {
@@ -166,25 +162,6 @@ namespace NewEPL {
             }
             return this;
         }
-        
-        //protected virtual void Resize(double width, double height) {
-        //    var thumb = GetThumb();
-        //    var image = (Image9)thumb.Template.FindName("image", thumb);
-
-        //    double w = width;
-        //    double h = height;
-
-        //    if (Double.IsNaN(width)) {
-        //        w = image.Patch.Width;
-        //    }
-        //    if (Double.IsNaN(height)) {
-        //        h = image.Patch.Height;
-        //    }
-
-        //    image.Source = image.Patch.GetPatchedImage((int)w, (int)h);
-
-        //    UpdateSplicer(image, (int)w, (int)h);
-        //}
 
         private static void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
@@ -198,6 +175,7 @@ namespace NewEPL {
 
         private static void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
+            bool escaper = false;
 
             b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
 
@@ -207,6 +185,7 @@ namespace NewEPL {
             }
 
             foreach (var i in b.Main.canvas.Children) {
+                if (escaper) break;
                 if (i.GetType() != typeof(BlockTemplate)) continue;
                 if (i.Equals(b)) continue;
 
@@ -222,14 +201,26 @@ namespace NewEPL {
 
                     if(otherSplicer.BlockChildren.Count > 0) continue;
 
+                    //if (b.GetBoundingBox(thisBorder).IntersectsWith(other.GetBoundingBox(otherBorder))) {
+                    //    other.AddChild(b, j);
+                    //    Canvas.SetLeft(b.Main.TestPreview, other.X + Canvas.GetLeft(otherBorder));
+                    //    Canvas.SetTop(b.Main.TestPreview, other.Y + Canvas.GetTop(otherBorder));
+                    //    b.Main.TestPreview.Visibility = Visibility.Visible;
+
+                    //    if ((b.Content as BlockTemplate).BlockParent != null) {
+                    //        ((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, b.ActualHeight * 1.25);
+                    //    }
+                    //    escaper = true;
+                    //}
+
                     if (b.GetBoundingBox(thisBorder).IntersectsWith(other.GetBoundingBox(otherBorder))) {
                         Canvas.SetLeft(b.Main.TestPreview, other.X + Canvas.GetLeft(otherBorder));
                         Canvas.SetTop(b.Main.TestPreview, other.Y + Canvas.GetTop(otherBorder));
                         b.Main.TestPreview.Visibility = Visibility.Visible;
 
-                        //if ((b.Content as BlockTemplate).BlockParent != null) {
-                        //    ((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, b.ActualHeight * 1.25);
-                        //}
+                        if ((b.Content as BlockTemplate).BlockParent != null) {
+                            ((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, b.ActualHeight * 1.25);
+                        }
                     }
                 }
             }
