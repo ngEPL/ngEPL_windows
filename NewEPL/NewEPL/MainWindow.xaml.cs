@@ -25,28 +25,28 @@ namespace NewEPL {
 
             ToggleList = new List<BlockList>();
 
-            var blocks_if = new List<BlockData>();
-            blocks_if.Add(new BlockData() { Template = new BlockTest3() { Width=210 * 0.8 } });
-            blocks_if.Add(new BlockData() { Template = new BlockTest1() { Width=210 * 0.8} });
-            blocks_if.Add(new BlockData() { Template = new BlockTest2() { Width = 210 * 0.8 } });
+            var blockGroupMotion = new List<BlockData>();
+            blockGroupMotion.Add(new BlockData() { Template = new BlockMotionMove() { Width=210 * 0.8 } });
 
-            var blocks_for = new List<BlockData>();
-            blocks_for.Add(new BlockData() { Template = new BlockTest4() { Width=280 * 0.8 } });
+            var blockGroupEvent = new List<BlockData>();
+            blockGroupEvent.Add(new BlockData() { Template = new BlockEventStart() { Width=210 * 0.8 } });
 
-            var blocks_text = new List<BlockData>();
+            var blockGroupControl = new List<BlockData>();
+            blockGroupControl.Add(new BlockData() { Template = new BlockControlIf() { Width = 280 * 0.8 } });
+            blockGroupControl.Add(new BlockData() { Template = new BlockControlStop() { Width = 210 * 0.8 } });
 
-            var blocks_list = new List<BlockData>();
+            var blockGroupSensing = new List<BlockData>();
 
-            var blocks_microbit = new List<BlockData>();
+            var blockGroupOperator = new List<BlockData>();
                 
-            var blocks_arduino = new List<BlockData>();
+            var blockGroupData = new List<BlockData>();
 
-            ToggleList.Add(new BlockList() { Category = "조건", Source = blocks_if });
-            ToggleList.Add(new BlockList() { Category = "반복", Source = blocks_for });
-            ToggleList.Add(new BlockList() { Category = "텍스트", Source = blocks_text });
-            ToggleList.Add(new BlockList() { Category = "리스트", Source = blocks_list });
-            ToggleList.Add(new BlockList() { Category = "마이크로 비트", Source = blocks_microbit });
-            ToggleList.Add(new BlockList() { Category = "아두이노", Source = blocks_arduino });
+            ToggleList.Add(new BlockList() { Category = "동작", Source = blockGroupMotion });
+            ToggleList.Add(new BlockList() { Category = "이벤트", Source = blockGroupEvent });
+            ToggleList.Add(new BlockList() { Category = "컨트롤", Source = blockGroupControl });
+            ToggleList.Add(new BlockList() { Category = "제어", Source = blockGroupSensing });
+            ToggleList.Add(new BlockList() { Category = "연산", Source = blockGroupOperator });
+            ToggleList.Add(new BlockList() { Category = "데이터", Source = blockGroupData });
 
             BlockLists.ItemsSource = ToggleList;
 
@@ -105,84 +105,6 @@ namespace NewEPL {
             } else {
                 btn.IsChecked = false;
                 ToggleButton_Unchecked(btn, null);
-            }
-        }
-
-        private void Thumb_DragDelta(object sender, DragDeltaEventArgs e) {
-            var b = sender as Block;
-            bool escaper = false;
-            b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
-
-            /// 일단 움직이면 자식에서 없애버림.
-            /// 부모가 있다면,
-            if (b.Parent != null) {
-                var me = new KeyValuePair<bool, string>();
-                foreach(var i in b.Parent.Children) {
-                    if(i.Value == b) {
-                        me = i.Key;
-                        break;
-                    }
-                }
-                b.Parent.Children.Remove(me);
-                b.Parent = null;
-            }
-
-            /// 어디에 붙일건지 표시
-            if (b.IsFemale) {
-                /// canvas.Children 대신 각 마지막 자식들이 들어가야함. 아니면 검색하면서 자식이 있는 블록은 무시하기.
-                foreach (var i in canvas.Children) {
-                    if (escaper) break;
-                    if (i == b) continue;
-                    /// 나중에 캔버스 사용하지 말고 리스트를 따로 만들기.
-                    if (i.GetType() != typeof(Block)) continue;
-                   
-                    var other = i as Block;
-                    /// 블록의 어느 위치에 붙일 지는 아직 안만듦, 무조건 아래쪽에 붙는다고 가정하고 만들어짐.
-                    foreach (var j in other.Cols) {
-                        if (!j.Key.Key) continue;
-                        if (other.Children.ContainsKey(j.Key)) continue;
-                        if (Block.RealCollider(b, b.GetFemale()).IntersectsWith(Block.RealCollider(other, j.Value))) {
-                            Canvas.SetLeft(TestPreview, other.X + j.Value.X);
-                            Canvas.SetTop(TestPreview, other.Y + j.Value.Y);
-                            TestPreview.Visibility = Visibility.Visible;
-                            escaper = true;
-                        }
-                    }
-                } 
-            }
-        }
-        
-        private void Thumb_DragCompleted(object sender, DragCompletedEventArgs e) { 
-            var b = sender as Block;
-            Block tmpOther = null;
-            bool escaper = false;
-            /// 붙이기
-            if (b.IsFemale) {
-                /// canvas.Children 대신 각 마지막 자식들이 들어가야함. 아니면 검색하면서 자식이 있는 블록은 무시하기.
-                foreach(var i in canvas.Children) {
-                    if (escaper) break;
-                    if (i == b) continue;
-                    if (i.GetType() != typeof(Block)) continue;
-
-                    var other = i as Block;
-
-                    foreach (var j in other.Cols) {
-                        if (!j.Key.Key) continue;
-                        if (other.Children.ContainsKey(j.Key)) continue;
-                        if (Block.RealCollider(b, b.GetFemale()).IntersectsWith(Block.RealCollider(other, j.Value))) {
-                            other.AddChild(j.Key, b, Block.RealCollider(other, j.Value));
-                            TestPreview.Visibility = Visibility.Hidden;
-                            tmpOther = other;
-                            escaper = true;
-                        } 
-                    }
-                }
-                /// 아무 생각 없이 나인패치 잘 작동하는지 보고 싶어 넣은 코드. 나중에 수정해야 함.
-                if (escaper) {
-                    if (tmpOther.Type == BlockType.TEST4) {
-                        tmpOther.Resize((int)tmpOther.DefaultWidth, 220 * tmpOther.Children.Count);
-                    }
-                }
             }
         }
     }
