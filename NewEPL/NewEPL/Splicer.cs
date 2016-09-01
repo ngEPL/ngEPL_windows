@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace NewEPL {
-    class Splicer : Control {
+    public class Splicer : Control {
         public static readonly DependencyProperty XProperty;
         public static readonly DependencyProperty YProperty;
         public static readonly DependencyProperty RelativeWidthProperty;
@@ -53,5 +53,7 @@ namespace NewEPL {
             get { return (int)GetValue(YStackProperty); }
             set { SetValue(YStackProperty, value); }
         }
+
+        public List<BlockTemplate> BlockChildren = new List<BlockTemplate>();
     }
 }

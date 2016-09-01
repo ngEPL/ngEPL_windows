@@ -31,8 +31,8 @@ namespace NewEPL {
         public double DifX = 0;
         public double DifY = 0;
 
-        List<BlockTemplate> BlockChildren = new List<BlockTemplate>();
-        BlockTemplate BlockParent = null;
+        public BlockTemplate BlockParent = null;
+        public Splicer SplicerParent = null;
 
         static BlockTemplate() {
         }
@@ -67,36 +67,41 @@ namespace NewEPL {
             return ret;
         }
 
-        private void MoveBlocks(double x, double y) {
+        public void MoveBlocks(double x, double y) {
             X = x;
             Y = y;
 
-            foreach (var i in BlockChildren) {
-                i.MoveBlocks(i.DifX + x, i.DifY + y);
+            foreach (var i in GetSplicers(1)) {
+                var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
+                foreach (var j in splicer.BlockChildren) {
+                    j.MoveBlocks(j.DifX + x, j.DifY + y);
+                }
             }
         }
 
         private void AddChild(BlockTemplate child, Border border) {
-            child.BlockParent = this;
-            BlockChildren.Add(child);
-            child.MoveBlocks(X + Canvas.GetLeft(border), Y+ Canvas.GetTop(border));
+            var splicer = (Splicer)VisualTreeHelper.GetChild(border as DependencyObject, 0);
+            (child.Content as BlockTemplate).BlockParent = this;
+            (child.Content as BlockTemplate).SplicerParent = splicer;
+            splicer.BlockChildren.Add(child);
+            child.MoveBlocks(X + Canvas.GetLeft(border), Y + Canvas.GetTop(border));
             child.DifX = -(this.X - child.X);
             child.DifY = -(this.Y - child.Y);
         }
 
-        private Thumb GetThumb() {
+        protected Thumb GetThumb() {
             if (this.GetType() == typeof(BlockTemplate))
                 return (Thumb)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 0);
             return (Thumb)VisualTreeHelper.GetChild((DependencyObject)Content, 0);
         }
 
-        private Canvas GetCanvas() {
+        protected Canvas GetCanvas() {
             if (this.GetType() == typeof(BlockTemplate))
                 return (Canvas)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 1);
             return (Canvas)VisualTreeHelper.GetChild((DependencyObject)Content, 1);
         }
 
-        private Splicer GetSplicer(int idx) {
+        protected Splicer GetSplicer(int idx) {
             var canvas = (Canvas)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 1);
             return (Splicer)VisualTreeHelper.GetChild(canvas.Children[idx] as DependencyObject, 0);
         }
@@ -106,7 +111,7 @@ namespace NewEPL {
         /// </summary>
         /// <param name="what">0일 때 Type=False만 가져옴. 1일 때 Type=True만 가져옴. -1일 때 모두 가져옴.</param>
         /// <returns></returns>
-        private List<Border> GetSplicers(int what) {
+        protected List<Border> GetSplicers(int what) {
             List<Border> ret = new List<Border>();
             var canvas = GetCanvas();
 
@@ -120,7 +125,23 @@ namespace NewEPL {
             return ret;
         }
 
-        private void UpdateSplicer(Image9 image, int width, int height) {
+        protected void RemoveChild(BlockTemplate child) {
+            foreach(var i in GetSplicers(1)) {
+                var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
+                foreach(var j in splicer.BlockChildren) {
+                    if(j.Equals(child)) {
+                        splicer.BlockChildren.Remove(j);
+                        return;
+                    }
+                }
+            }
+        }
+
+        //protected Splicer GetTopBlockParent() {
+
+        //}
+
+        protected void UpdateSplicer(Image9 image, int width, int height) {
             var canvas = GetCanvas();
             foreach (var i in canvas.Children) {
                 var border = i as Border;
@@ -138,25 +159,32 @@ namespace NewEPL {
             var splicer = (Splicer)VisualTreeHelper.GetChild(border, 0);
             return new Rect(X + Canvas.GetLeft(border), Y + Canvas.GetTop(border), splicer.Width, splicer.Height);
         }
-        
-        protected virtual void Resize(double width, double height) {
-            var thumb = GetThumb();
-            var image = (Image9)thumb.Template.FindName("image", thumb);
 
-            double w = width;
-            double h = height;
-
-            if (Double.IsNaN(width)) {
-                w = image.Patch.Width;
+        public virtual BlockTemplate Resize(Splicer what, double width, double height) {
+            if(BlockParent != null) {
+                (BlockParent.Content as BlockTemplate).Resize(what, 0, height);
             }
-            if (Double.IsNaN(height)) {
-                h = image.Patch.Height;
-            }
-
-            image.Source = image.Patch.GetPatchedImage((int)w, (int)h);
-
-            UpdateSplicer(image, (int)w, (int)h);
+            return this;
         }
+        
+        //protected virtual void Resize(double width, double height) {
+        //    var thumb = GetThumb();
+        //    var image = (Image9)thumb.Template.FindName("image", thumb);
+
+        //    double w = width;
+        //    double h = height;
+
+        //    if (Double.IsNaN(width)) {
+        //        w = image.Patch.Width;
+        //    }
+        //    if (Double.IsNaN(height)) {
+        //        h = image.Patch.Height;
+        //    }
+
+        //    image.Source = image.Patch.GetPatchedImage((int)w, (int)h);
+
+        //    UpdateSplicer(image, (int)w, (int)h);
+        //}
 
         private static void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
@@ -173,9 +201,9 @@ namespace NewEPL {
 
             b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
 
-            if (b.BlockParent != null) {
-                b.BlockParent.BlockChildren.Remove(b);
-                b.BlockParent = null;
+            if ((b.Content as BlockTemplate).BlockParent != null) {
+                (b.Content as BlockTemplate).BlockParent.RemoveChild(b);
+                (b.Content as BlockTemplate).BlockParent = null;
             }
 
             foreach (var i in b.Main.canvas.Children) {
@@ -191,10 +219,17 @@ namespace NewEPL {
                     var thisSplicer = (Splicer)VisualTreeHelper.GetChild(thisBorder, 0);
                     var otherBorder = (Border)j;
                     var otherSplicer = (Splicer)VisualTreeHelper.GetChild(otherBorder, 0);
+
+                    if(otherSplicer.BlockChildren.Count > 0) continue;
+
                     if (b.GetBoundingBox(thisBorder).IntersectsWith(other.GetBoundingBox(otherBorder))) {
                         Canvas.SetLeft(b.Main.TestPreview, other.X + Canvas.GetLeft(otherBorder));
                         Canvas.SetTop(b.Main.TestPreview, other.Y + Canvas.GetTop(otherBorder));
                         b.Main.TestPreview.Visibility = Visibility.Visible;
+
+                        //if ((b.Content as BlockTemplate).BlockParent != null) {
+                        //    ((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, b.ActualHeight * 1.25);
+                        //}
                     }
                 }
             }
@@ -206,8 +241,10 @@ namespace NewEPL {
         /// 추가해야하는 기능. 겹치는 두 블록 그룹에 자식을 추가할 때 마우스 포인터와 충돌해 있는 블록 그룹에 자식이 붙어야 함.
         private static void Thumb_DragCompleted(object sender, DragCompletedEventArgs e) {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
+            bool escaper = false;
 
             foreach (var i in b.Main.canvas.Children) {
+                if (escaper) break;
                 if (i.GetType() != typeof(BlockTemplate)) continue;
                 if (i.Equals(b)) continue;
 
@@ -220,14 +257,17 @@ namespace NewEPL {
                     var thisSplicer = (Splicer)VisualTreeHelper.GetChild(thisBorder, 0);
                     var otherBorder = (Border)j;
                     var otherSplicer = (Splicer)VisualTreeHelper.GetChild(otherBorder, 0);
+
+                    if (otherSplicer.BlockChildren.Count > 0) continue;
+
                     if (b.GetBoundingBox(thisBorder).IntersectsWith(other.GetBoundingBox(otherBorder))) {
                         other.AddChild(b, j);
                         b.Main.TestPreview.Visibility = Visibility.Hidden;
 
-                        if(other.Content.GetType() == typeof(BlockTest4)) {
-                            //(other.Content as BlockTest4);
-                            //other.Resize(Double.NaN, other.ActualHeight);
+                        if ((b.Content as BlockTemplate).BlockParent != null) {
+                            ((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, b.ActualHeight * 1.25);
                         }
+                        escaper = true;
                     }
                 }
             }
