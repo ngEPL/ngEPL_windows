@@ -156,6 +156,21 @@ namespace NewEPL {
             return new Rect(X + Canvas.GetLeft(border), Y + Canvas.GetTop(border), splicer.Width, splicer.Height);
         }
 
+        // 블록마다 길이 구하는 방식이 다를 수 있음 (IF블록 같은 경우 안쪽 자식 블록은 계산하지 않고 밑 블록만 계산에 넣음)
+        protected virtual double GetTotalHeight() {
+            double ret = ActualHeight;
+
+            foreach(var i in GetSplicers(1)) {
+                var splicer = (Splicer)VisualTreeHelper.GetChild(i, 0);
+
+                foreach(var j in splicer.BlockChildren) {
+                    ret += j.ActualHeight;
+                }
+            }
+
+            return ret;
+        }
+
         public virtual BlockTemplate Resize(Splicer what, double width, double height) {
             if(BlockParent != null) {
                 (BlockParent.Content as BlockTemplate).Resize(what, 0, height);
@@ -256,7 +271,7 @@ namespace NewEPL {
                         b.Main.TestPreview.Visibility = Visibility.Hidden;
 
                         if ((b.Content as BlockTemplate).BlockParent != null) {
-                            ((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, b.ActualHeight * 1.25);
+                            ((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight() * 1.25);
                         }
                         escaper = true;
                     }

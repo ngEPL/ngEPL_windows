@@ -12,6 +12,22 @@ namespace NewEPL {
             InitializeComponent();
         }
 
+        protected override double GetTotalHeight() {
+            double ret = ActualHeight;
+
+            foreach (var i in GetSplicers(1)) {
+                var splicer = (Splicer)VisualTreeHelper.GetChild(i, 0);
+
+                if (splicer.YStack == 0) continue;
+
+                foreach (var j in splicer.BlockChildren) {
+                    ret += j.ActualHeight;
+                }
+            }
+
+            return ret;
+        }
+
         public override BlockTemplate Resize(Splicer what, double width, double height) {
 
             if (BlockParent != null) {
