@@ -26,14 +26,14 @@ namespace NewEPL {
             ToggleList = new List<BlockList>();
 
             var blockGroupMotion = new List<BlockData>();
-            blockGroupMotion.Add(new BlockData() { Template = new BlockMotionMove() { Width=210 * 0.8 } });
+            blockGroupMotion.Add(new BlockData() { Template = new BlockMotionMove() { Width = 180 } });
 
             var blockGroupEvent = new List<BlockData>();
-            blockGroupEvent.Add(new BlockData() { Template = new BlockEventStart() { Width=210 * 0.8 } });
+            blockGroupEvent.Add(new BlockData() { Template = new BlockEventStart() { Width = 180 } });
 
             var blockGroupControl = new List<BlockData>();
-            blockGroupControl.Add(new BlockData() { Template = new BlockControlIf() { Width = 280 * 0.8 } });
-            blockGroupControl.Add(new BlockData() { Template = new BlockControlStop() { Width = 210 * 0.8 } });
+            blockGroupControl.Add(new BlockData() { Template = new BlockControlIf() { Width = 210 } });
+            blockGroupControl.Add(new BlockData() { Template = new BlockControlStop() { Width = 180 } });
 
             var blockGroupSensing = new List<BlockData>();
 

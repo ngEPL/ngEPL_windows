@@ -12,7 +12,7 @@ namespace NewEPL {
             InitializeComponent();
         }
 
-        protected override double GetTotalHeight() {
+        public override double GetTotalHeight() {
             double ret = ActualHeight;
 
             foreach (var i in GetSplicers(1)) {
@@ -21,7 +21,7 @@ namespace NewEPL {
                 if (splicer.YStack == 0) continue;
 
                 foreach (var j in splicer.BlockChildren) {
-                    ret += j.ActualHeight;
+                    ret += (j.Content as BlockTemplate).GetTotalHeight();
                 }
             }
 
@@ -50,7 +50,7 @@ namespace NewEPL {
                 parentSplicer = parentBlock.SplicerParent;
                 parentBlock = (BlockTemplate)(((parentBlock.SplicerParent.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
             }
-
+            
             var thumb = GetThumb();
             var image = (Image9)thumb.Template.FindName("image", thumb);
 
@@ -64,10 +64,10 @@ namespace NewEPL {
                 h = image.Patch.Height;
             }
 
-            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, (int)(ActualHeight * 1.25 + height - 6));
+            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, (int)(ActualHeight + height));
 
             /// 모든 자식 크기만큼 늘어나게 해야할듯.
-            UpdateSplicer(image, (int)image.Patch.Width, (int)(ActualHeight * 1.25 + height - 6));
+            UpdateSplicer(image, (int)image.Patch.Width, (int)(ActualHeight + height));
             
             foreach (var i in GetSplicers(1)) {
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);

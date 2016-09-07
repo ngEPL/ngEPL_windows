@@ -102,7 +102,7 @@ namespace NewEPL {
             var ret = new WriteableBitmap(targetWidth, targetHeight, 96, 96, PixelFormats.Bgra32, null);//WriteableBitmap.Create(targetWidth, targetHeight, 96, 96, PixelFormats.Bgra32, null, pixelsId, stride);
             ret.WritePixels(new Int32Rect(0, 0, targetWidth, targetHeight), pixelsId, stride, 0);
 
-            Cache.Add(String.Format("{0}x{1}", targetWidth, targetHeight), ret);
+            //Cache.Add(String.Format("{0}x{1}", targetWidth, targetHeight), ret);
 
             return ret;
         }

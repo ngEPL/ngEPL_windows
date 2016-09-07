@@ -118,8 +118,10 @@
         </TextBox>-->
 
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-        <Canvas Grid.Column="2" x:Name="canvas" AllowDrop="True" Background="#00000000" Drop="canvas_Drop" >
-        </Canvas>
+        <ScrollViewer Grid.Column="2" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <Canvas x:Name="canvas" AllowDrop="True" Background="#00000000" Drop="canvas_Drop" >
+            </Canvas>
+        </ScrollViewer>
         <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
         <Label x:Name="test" Content="Label" Grid.Column="4" HorizontalAlignment="Left" Margin="9.667,10,0,0" VerticalAlignment="Top"/>
     </Grid>
