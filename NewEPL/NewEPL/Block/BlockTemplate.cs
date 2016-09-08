@@ -39,7 +39,7 @@ namespace NewEPL {
         static BlockTemplate() {
         }
 
-        public static BlockTemplate CreateBlock(BlockTemplate b) {
+        public static BlockTemplate CopyBlockContent(BlockTemplate b) {
             var ret = (BlockTemplate)Activator.CreateInstance(b.GetType());
             var thumb = ret.GetThumb();
             var canvas = ret.GetCanvas();
@@ -78,7 +78,7 @@ namespace NewEPL {
             }
         }
 
-        private void AddChild(BlockTemplate child, Border border) {
+        public void AddChild(BlockTemplate child, Border border) {
             var splicer = (Splicer)VisualTreeHelper.GetChild(border as DependencyObject, 0);
             (child.Content as BlockTemplate).BlockParent = this;
             (child.Content as BlockTemplate).SplicerParent = splicer;
@@ -88,19 +88,19 @@ namespace NewEPL {
             child.DifY = -(this.Y - child.Y);
         }
 
-        protected Thumb GetThumb() {
+        public Thumb GetThumb() {
             if (this.GetType() == typeof(BlockTemplate))
                 return (Thumb)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 0);
             return (Thumb)VisualTreeHelper.GetChild((DependencyObject)Content, 0);
         }
 
-        protected Canvas GetCanvas() {
+        public Canvas GetCanvas() {
             if (this.GetType() == typeof(BlockTemplate))
                 return (Canvas)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 1);
             return (Canvas)VisualTreeHelper.GetChild((DependencyObject)Content, 1);
         }
 
-        protected Splicer GetSplicer(int idx) {
+        public Splicer GetSplicer(int idx) {
             var canvas = (Canvas)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 1);
             return (Splicer)VisualTreeHelper.GetChild(canvas.Children[idx] as DependencyObject, 0);
         }
@@ -110,7 +110,7 @@ namespace NewEPL {
         /// </summary>
         /// <param name="what">0일 때 Type=False만 가져옴. 1일 때 Type=True만 가져옴. -1일 때 모두 가져옴.</param>
         /// <returns></returns>
-        protected List<Border> GetSplicers(int what) {
+        public List<Border> GetSplicers(int what) {
             List<Border> ret = new List<Border>();
             var canvas = GetCanvas();
 

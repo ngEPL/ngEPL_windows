@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
+using Mocca;
+using Mocca.DataType;
 
 namespace NewEPL {
     /// <summary>
@@ -19,6 +21,8 @@ namespace NewEPL {
     public partial class MainWindow : Window {
         List<BlockList> ToggleList;
         public Rectangle TestPreview;
+
+        List<MoccaBlockGroup> eval;
 
         public MainWindow() {
             InitializeComponent();
@@ -62,11 +66,16 @@ namespace NewEPL {
             canvas.Children.Add(TestPreview);
 
             TestPreview.Visibility = Visibility.Hidden;
+
+
+            var parser = new MoccaParser("Resources/middle_lang.mocca", CompileMode.FILE_PASS);
+            eval = parser.Parse().Eval();
+
         }                                                            
 
         private void block_Drag(object sender, MouseButtonEventArgs e) {
             var block = sender as BlockTemplate;
-            var clone = BlockTemplate.CreateBlock((BlockTemplate)block.Content);
+            var clone = BlockTemplate.CopyBlockContent((BlockTemplate)block.Content);
             var data = new DataObject(typeof(BlockTemplate), clone);
             DragDrop.DoDragDrop(block, data, DragDropEffects.Copy);
         }
@@ -90,6 +99,24 @@ namespace NewEPL {
             (BlockLists.ItemContainerGenerator.ContainerFromIndex(idx) as ListBoxItem).Visibility = Visibility.Collapsed;
         }
 
+        private BlockTemplate GetBlockForList(Type type) {
+            BlockTemplate ret = null;
+
+            bool escaper = false;
+            foreach(BlockList i in BlockLists.Items) {
+                foreach(var j in i.Source) {
+                    if(j.Template.GetType().Equals(type)) {
+                        ret = j.Template;
+                        escaper = true;
+                        break;
+                    }
+                }
+                if (escaper) break;
+            }
+
+            return ret;
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             ToggleCheck(Toggle_if, true);
             ToggleCheck(Toggle_for, true);
@@ -97,6 +124,51 @@ namespace NewEPL {
             ToggleCheck(Toggle_list, true);
             ToggleCheck(Toggle_microbit, true);
             ToggleCheck(Toggle_arduino, true);
+
+            foreach(var i in eval) {
+                /// 엔트리 블록 생성
+                var entry = new BlockTemplate();
+                entry.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockEventStart)));
+                entry.X = i.x;
+                entry.Y = i.y;
+                BlockSpace.Children.Add(entry);
+
+                BlockTemplate block = entry;
+                foreach (var j in i.suite) {
+                    /// 하위 블록 생성
+                    var type = j.GetType();
+                    if (type == typeof(MoccaCommand)) {
+                        MoccaCommand suite = (MoccaCommand)j;
+
+                        var parent = block;
+
+                        block = new BlockTemplate();
+                        block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockMotionMove)));
+                        block.X = 0;
+                        block.Y = 0;
+                        parent.AddChild(block, parent.GetSplicers(1)[0]);
+
+                        BlockSpace.Children.Add(block);
+
+                    } else if (type == typeof(MoccaLogic)) {
+                        MoccaLogic suite = (MoccaLogic)j;
+
+
+                    } else if (type == typeof(MoccaWhile)) {
+                        MoccaWhile suite = (MoccaWhile)j;
+
+
+                    } else if (type == typeof(MoccaArray)) {
+                        MoccaArray suite = (MoccaArray)j;
+
+
+                    } else if (type == typeof(MoccaFor)) {
+                        MoccaFor suite = (MoccaFor)j;
+
+
+                    } ///기타 등등..
+                }
+            }
         }
 
         private void ToggleCheck(ToggleButton btn, bool v) {
