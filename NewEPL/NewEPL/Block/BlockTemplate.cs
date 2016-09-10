@@ -190,6 +190,7 @@ namespace NewEPL {
         Border CollideBorder = null;
         Splicer CollideSplicer = null;
 
+        /// 이미지 늘어나는 기능을 따로 빼기.
         private static void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
             bool escaper = false;
@@ -212,7 +213,7 @@ namespace NewEPL {
             Border collideBorder = null;
             Splicer collideSplicer = null;
 
-            foreach (var i in b.Main.canvas.Children) {
+            foreach (var i in b.Main.BlockCanvas.Children) {
                 if (escaper) break;
                 if (i.GetType() != typeof(BlockTemplate)) continue;
                 if (i.Equals(b)) continue;
@@ -275,7 +276,7 @@ namespace NewEPL {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
             bool escaper = false;
 
-            foreach (var i in b.Main.canvas.Children) {
+            foreach (var i in b.Main.BlockCanvas.Children) {
                 if (escaper) break;
                 if (i.GetType() != typeof(BlockTemplate)) continue;
                 if (i.Equals(b)) continue;

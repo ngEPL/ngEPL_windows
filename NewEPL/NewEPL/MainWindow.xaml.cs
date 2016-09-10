@@ -63,7 +63,7 @@ namespace NewEPL {
             Canvas.SetLeft(TestPreview, 0);
             Canvas.SetTop(TestPreview, 0);
             Canvas.SetZIndex(TestPreview, 10000000);
-            canvas.Children.Add(TestPreview);
+            BlockCanvas.Children.Add(TestPreview);
 
             TestPreview.Visibility = Visibility.Hidden;
 
@@ -83,10 +83,10 @@ namespace NewEPL {
         private void canvas_Drop(object sender, DragEventArgs e) {
             var data = e.Data.GetData(typeof(BlockTemplate)) as BlockTemplate;
             var copy = new BlockTemplate();
-            copy.X = e.GetPosition(canvas).X;
-            copy.Y = e.GetPosition(canvas).Y;
+            copy.X = e.GetPosition(BlockCanvas).X;
+            copy.Y = e.GetPosition(BlockCanvas).Y;
             copy.Content = data;
-            this.canvas.Children.Add(copy);
+            BlockCanvas.Children.Add(copy);
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e) {
@@ -117,6 +117,61 @@ namespace NewEPL {
             return ret;
         }
 
+        public BlockTemplate Cursor = null;
+
+        /// 이름 수정하기
+        private void AAA(MoccaSuite s) {
+            Type type = s.GetType();
+
+            if (type == typeof(MoccaCommand)) {
+                MoccaCommand suite = (MoccaCommand)s;
+
+                var block = new BlockTemplate();
+                block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockMotionMove)));
+                block.X = 0;
+                block.Y = 0;
+                Cursor.AddChild(block, Cursor.GetSplicers(1)[0]);
+
+                BlockCanvas.Children.Add(block);
+
+                Cursor = block;
+
+            } else if (type == typeof(MoccaLogic)) {
+                MoccaLogic suite = (MoccaLogic)s;
+
+                var block = new BlockTemplate();
+                block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockControlIf)));
+                block.X = 0;
+                block.Y = 0;
+
+                foreach (var k in Cursor.GetSplicers(1)) {
+                    if (((Splicer)VisualTreeHelper.GetChild(k, 0)).YStack == 1) {
+                        Cursor.AddChild(block, k);
+                        break;
+                    }
+                }
+
+                BlockCanvas.Children.Add(block);
+                
+                Cursor = block;
+                foreach (var k in suite.cmd_list) {
+                    AAA(k);
+                }
+
+                Cursor = block;
+
+            } else if (type == typeof(MoccaWhile)) {
+                MoccaWhile suite = (MoccaWhile)s;
+
+            } else if (type == typeof(MoccaArray)) {
+                MoccaArray suite = (MoccaArray)s;
+
+            } else if (type == typeof(MoccaFor)) {
+                MoccaFor suite = (MoccaFor)s;
+
+            } ///기타 등등..
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             ToggleCheck(Toggle_if, true);
             ToggleCheck(Toggle_for, true);
@@ -125,48 +180,80 @@ namespace NewEPL {
             ToggleCheck(Toggle_microbit, true);
             ToggleCheck(Toggle_arduino, true);
 
+            /// 재귀 구조가 필요할 듯.
             foreach(var i in eval) {
                 /// 엔트리 블록 생성
                 var entry = new BlockTemplate();
                 entry.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockEventStart)));
                 entry.X = i.x;
                 entry.Y = i.y;
-                BlockSpace.Children.Add(entry);
-
-                BlockTemplate block = entry;
+                BlockCanvas.Children.Add(entry);
+                
+                Cursor = entry;
                 foreach (var j in i.suite) {
                     /// 하위 블록 생성
-                    var type = j.GetType();
-                    if (type == typeof(MoccaCommand)) {
-                        MoccaCommand suite = (MoccaCommand)j;
+                    AAA(j);
 
-                        var parent = block;
+                    //var type = j.GetType();
+                    //if (type == typeof(MoccaCommand)) {
+                    //    MoccaCommand suite = (MoccaCommand)j;
 
-                        block = new BlockTemplate();
-                        block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockMotionMove)));
-                        block.X = 0;
-                        block.Y = 0;
-                        parent.AddChild(block, parent.GetSplicers(1)[0]);
+                    //    var parent = block;
 
-                        BlockSpace.Children.Add(block);
+                    //    block = new BlockTemplate();
+                    //    block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockMotionMove)));
+                    //    block.X = 0;
+                    //    block.Y = 0;
+                    //    parent.AddChild(block, parent.GetSplicers(1)[0]);
 
-                    } else if (type == typeof(MoccaLogic)) {
-                        MoccaLogic suite = (MoccaLogic)j;
+                    //    BlockCanvas.Children.Add(block);
+
+                    //} else if (type == typeof(MoccaLogic)) {
+                    //    MoccaLogic suite = (MoccaLogic)j;
+
+                    //    var parent = block;
+
+                    //    block = new BlockTemplate();
+                    //    block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockControlIf)));
+                    //    block.X = 0;
+                    //    block.Y = 0;
+
+                    //    foreach(var k in parent.GetSplicers(1)) {
+                    //        if(((Splicer)VisualTreeHelper.GetChild(k, 0)).YStack == 1) {
+                    //            parent.AddChild(block, k);
+                    //            break;
+                    //        }
+                    //    }
+
+                    //    BlockCanvas.Children.Add(block);
+
+                    //    foreach(var k in suite.cmd_list) {
+                    //        MoccaCommand suite2 = (MoccaCommand)k;
+
+                    //        var parent2 = block;
+
+                    //        block = new BlockTemplate();
+                    //        block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockMotionMove)));
+                    //        block.X = 0;
+                    //        block.Y = 0;
+                    //        parent2.AddChild(block, parent2.GetSplicers(1)[0]);
+
+                    //        BlockCanvas.Children.Add(block);
+                    //    }
+
+                    //} else if (type == typeof(MoccaWhile)) {
+                    //    MoccaWhile suite = (MoccaWhile)j;
 
 
-                    } else if (type == typeof(MoccaWhile)) {
-                        MoccaWhile suite = (MoccaWhile)j;
+                    //} else if (type == typeof(MoccaArray)) {
+                    //    MoccaArray suite = (MoccaArray)j;
 
 
-                    } else if (type == typeof(MoccaArray)) {
-                        MoccaArray suite = (MoccaArray)j;
+                    //} else if (type == typeof(MoccaFor)) {
+                    //    MoccaFor suite = (MoccaFor)j;
 
 
-                    } else if (type == typeof(MoccaFor)) {
-                        MoccaFor suite = (MoccaFor)j;
-
-
-                    } ///기타 등등..
+                    //} ///기타 등등..
                 }
             }
         }
