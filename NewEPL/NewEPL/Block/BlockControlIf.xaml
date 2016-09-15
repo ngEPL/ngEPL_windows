@@ -25,5 +25,10 @@
                 <local:Splicer Width="NaN" RelativeWidth="-16" Height="12" Type="True" X="0" Y="37" YStack="1"/>
             </Border>
         </Canvas>
+        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="32" VerticalAlignment="Top" Margin="0,10,0.333,0">
+            <Label VerticalAlignment="Center">만약</Label>
+            <TextBox VerticalAlignment="Center"></TextBox>
+            <Label VerticalAlignment="Center">라면</Label>
+        </StackPanel>
     </Grid>
 </local:BlockTemplate>

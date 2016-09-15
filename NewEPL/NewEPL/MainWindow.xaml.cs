@@ -22,7 +22,12 @@ namespace NewEPL {
         List<BlockList> ToggleList;
         public Rectangle TestPreview;
 
-        List<MoccaBlockGroup> eval;
+        List<MoccaBlockGroup> Eval;
+
+        /// <summary>
+        ///  파일 불러오고 저장할 때 사용될 블록 엔트리 리스트
+        /// </summary>
+        List<BlockTemplate> EntryBlockList = new List<BlockTemplate>();
 
         public MainWindow() {
             InitializeComponent();
@@ -69,7 +74,7 @@ namespace NewEPL {
 
 
             var parser = new MoccaParser("Resources/middle_lang.mocca", CompileMode.FILE_PASS);
-            eval = parser.Parse().Eval();
+            Eval = parser.Parse().Eval();
 
         }                                                            
 
@@ -133,6 +138,7 @@ namespace NewEPL {
                 Cursor.AddChild(block, Cursor.GetSplicers(1)[0]);
 
                 BlockCanvas.Children.Add(block);
+                // 내부 블록을 처리해야 함(연산자같은 것).
 
                 Cursor = block;
 
@@ -144,9 +150,9 @@ namespace NewEPL {
                 block.X = 0;
                 block.Y = 0;
 
-                foreach (var k in Cursor.GetSplicers(1)) {
-                    if (((Splicer)VisualTreeHelper.GetChild(k, 0)).YStack == 1) {
-                        Cursor.AddChild(block, k);
+                foreach (var i in Cursor.GetSplicers(1)) {
+                    if (((Splicer)VisualTreeHelper.GetChild(i, 0)).YStack == 1) {
+                        Cursor.AddChild(block, i);
                         break;
                     }
                 }
@@ -154,8 +160,8 @@ namespace NewEPL {
                 BlockCanvas.Children.Add(block);
                 
                 Cursor = block;
-                foreach (var k in suite.cmd_list) {
-                    AAA(k);
+                for (int i = 0; i < suite.cmd_list.Count; i++) {
+                    AAA(suite.cmd_list[i]);
                 }
 
                 Cursor = block;
@@ -172,6 +178,24 @@ namespace NewEPL {
             } ///기타 등등..
         }
 
+        private void BlockRefresh(BlockTemplate parent) {
+
+            var splicers = parent.GetSplicers(1);
+            for (int i = 0; i < splicers.Count; i++) {
+                var splicer = (Splicer)VisualTreeHelper.GetChild(splicers[i], 0);
+                foreach (var j in splicer.BlockChildren) {
+                    if (i != splicers.Count - 1 && parent.Content.GetType() == typeof(BlockControlIf)) {
+                        j.IsResized = true;
+                        j.CollideBorder = splicers[i];
+                        j.CollideSplicer = splicer;
+                         (parent.Content as BlockTemplate).Resize(splicer, 0, (j.Content as BlockTemplate).GetTotalHeight());
+                    }
+                    BlockRefresh(j);
+                }
+            }
+
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             ToggleCheck(Toggle_if, true);
             ToggleCheck(Toggle_for, true);
@@ -181,80 +205,28 @@ namespace NewEPL {
             ToggleCheck(Toggle_arduino, true);
 
             /// 재귀 구조가 필요할 듯.
-            foreach(var i in eval) {
+            foreach(var i in Eval) {
                 /// 엔트리 블록 생성
                 var entry = new BlockTemplate();
                 entry.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockEventStart)));
                 entry.X = i.x;
                 entry.Y = i.y;
                 BlockCanvas.Children.Add(entry);
+
+                EntryBlockList.Add(entry);
                 
                 Cursor = entry;
                 foreach (var j in i.suite) {
                     /// 하위 블록 생성
                     AAA(j);
-
-                    //var type = j.GetType();
-                    //if (type == typeof(MoccaCommand)) {
-                    //    MoccaCommand suite = (MoccaCommand)j;
-
-                    //    var parent = block;
-
-                    //    block = new BlockTemplate();
-                    //    block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockMotionMove)));
-                    //    block.X = 0;
-                    //    block.Y = 0;
-                    //    parent.AddChild(block, parent.GetSplicers(1)[0]);
-
-                    //    BlockCanvas.Children.Add(block);
-
-                    //} else if (type == typeof(MoccaLogic)) {
-                    //    MoccaLogic suite = (MoccaLogic)j;
-
-                    //    var parent = block;
-
-                    //    block = new BlockTemplate();
-                    //    block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockControlIf)));
-                    //    block.X = 0;
-                    //    block.Y = 0;
-
-                    //    foreach(var k in parent.GetSplicers(1)) {
-                    //        if(((Splicer)VisualTreeHelper.GetChild(k, 0)).YStack == 1) {
-                    //            parent.AddChild(block, k);
-                    //            break;
-                    //        }
-                    //    }
-
-                    //    BlockCanvas.Children.Add(block);
-
-                    //    foreach(var k in suite.cmd_list) {
-                    //        MoccaCommand suite2 = (MoccaCommand)k;
-
-                    //        var parent2 = block;
-
-                    //        block = new BlockTemplate();
-                    //        block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockMotionMove)));
-                    //        block.X = 0;
-                    //        block.Y = 0;
-                    //        parent2.AddChild(block, parent2.GetSplicers(1)[0]);
-
-                    //        BlockCanvas.Children.Add(block);
-                    //    }
-
-                    //} else if (type == typeof(MoccaWhile)) {
-                    //    MoccaWhile suite = (MoccaWhile)j;
-
-
-                    //} else if (type == typeof(MoccaArray)) {
-                    //    MoccaArray suite = (MoccaArray)j;
-
-
-                    //} else if (type == typeof(MoccaFor)) {
-                    //    MoccaFor suite = (MoccaFor)j;
-
-
-                    //} ///기타 등등..
                 }
+            }
+
+            UpdateLayout();
+
+            /// 화면 리프레시 하기
+            foreach (var i in EntryBlockList) {
+                BlockRefresh(i);
             }
         }
 

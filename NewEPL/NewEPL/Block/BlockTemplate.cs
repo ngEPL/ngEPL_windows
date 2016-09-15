@@ -34,7 +34,7 @@ namespace NewEPL {
         public BlockTemplate BlockParent = null;
         public Splicer SplicerParent = null;
 
-        private bool IsResized = false;
+        public bool IsResized = false;
 
         static BlockTemplate() {
         }
@@ -187,8 +187,8 @@ namespace NewEPL {
             b.Main = (MainWindow)Window.GetWindow(b);
         }
 
-        Border CollideBorder = null;
-        Splicer CollideSplicer = null;
+        public Border CollideBorder = null;
+        public Splicer CollideSplicer = null;
 
         /// 이미지 늘어나는 기능을 따로 빼기.
         private static void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
@@ -210,9 +210,6 @@ namespace NewEPL {
 
             bool isCollision = false;
 
-            Border collideBorder = null;
-            Splicer collideSplicer = null;
-
             foreach (var i in b.Main.BlockCanvas.Children) {
                 if (escaper) break;
                 if (i.GetType() != typeof(BlockTemplate)) continue;
@@ -229,18 +226,6 @@ namespace NewEPL {
                     var otherSplicer = (Splicer)VisualTreeHelper.GetChild(otherBorder, 0);
 
                     if(otherSplicer.BlockChildren.Count > 0) continue;
-
-                    //if (b.GetBoundingBox(thisBorder).IntersectsWith(other.GetBoundingBox(otherBorder))) {
-                    //    other.AddChild(b, j);
-                    //    Canvas.SetLeft(b.Main.TestPreview, other.X + Canvas.GetLeft(otherBorder));
-                    //    Canvas.SetTop(b.Main.TestPreview, other.Y + Canvas.GetTop(otherBorder));
-                    //    b.Main.TestPreview.Visibility = Visibility.Visible;
-
-                    //    if ((b.Content as BlockTemplate).BlockParent != null) {
-                    //        ((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, b.ActualHeight * 1.25);
-                    //    }
-                    //    escaper = true;
-                    //}
 
                     if (b.GetBoundingBox(thisBorder).IntersectsWith(other.GetBoundingBox(otherBorder))) {
                         Canvas.SetLeft(b.Main.TestPreview, other.X + Canvas.GetLeft(otherBorder));
