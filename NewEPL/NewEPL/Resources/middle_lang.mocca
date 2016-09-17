@@ -12,19 +12,19 @@
     <code>
         blockgroup(setVariable, 300, 100) {
             def(name, "홍승환");
-            def(isHuman, true);
-            def(age, 20);
-            def(loop_count, 0);
-            def(fruits, ["사과","배","오렌지","수박","참외"]);
-            def(students,{("20163178","홍기훈"),("20163179","홍승환"),("20163180","홍자현"),("20163181","황수진")});
+            //def(isHuman, true);
+            //def(age, 20);
+            //def(loop_count, 0);
+            //def(fruits, ["사과","배","오렌지","수박","참외"]);
+            //def(students,{("20163178","홍기훈"),("20163179","홍승환"),("20163180","홍자현"),("20163181","황수진")});
         }
 
-        blockgroup(printAll, 0, 0) {
-            cmd(print,"안녕, 세상아!");
-            cmd(print,10);
-            cmd(print,textgen("당신의 이름은",name,"입니다."));
-            cmd(print,textgen("루트 2는",modcall(math,"sqrt(2)"),"입니다."));
-        }
+        //blockgroup(printAll, 0, 0) {
+        //    cmd(print,"안녕, 세상아!");
+        //    cmd(print,10);
+        //    cmd(print,textgen("당신의 이름은",name,"입니다."));
+        //    cmd(print,textgen("루트 2는",modcall(math,"sqrt(2)"),"입니다."));
+        //}
 
         blockgroup(logicAndLoop, 500, 100) {
             if (logic_compare(age, 14, NOT_EQUAL)) {

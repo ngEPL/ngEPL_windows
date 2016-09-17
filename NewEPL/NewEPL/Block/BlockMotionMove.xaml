@@ -10,7 +10,7 @@
         <Thumb>
             <Thumb.Template>
                 <ControlTemplate>
-                    <local:Image9 x:Name="image" DefaultWidth="180" DefaultHeight="62" SourceUrl="pack://siteoforigin:,,,/Resources/block_motion_move.9.png" />
+                    <local:Image9 x:Name="image" DefaultWidth="180" DefaultHeight="72" Color="#D780F8" SourceUrl="pack://siteoforigin:,,,/Resources/block_normal1.9.png" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
@@ -19,12 +19,12 @@
                 <local:Splicer Width="NaN" Height="12" Type="False" X="0" Y="0" YStack="0"/>
             </Border>
             <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
-                <local:Splicer Width="NaN" Height="12" Type="True" X="0" Y="0" YStack="1"/>
+                <local:Splicer Width="NaN" Height="12" Type="True" X="0" Y="8" YStack="1"/>
             </Border>
         </Canvas>
-        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="32" VerticalAlignment="Top" Margin="0,10,0.333,0">
-            <TextBox VerticalAlignment="Center"></TextBox>
-            <Label VerticalAlignment="Center">만큼 움직이기</Label>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="40" VerticalAlignment="Top" Margin="0,10,0.333,0">
+            <TextBox VerticalAlignment="Center" Margin="0,11"/>
+            <Label VerticalAlignment="Center" FontSize="20" Foreground="White" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="만큼 움직이기"/>
         </StackPanel>
     </Grid>
 </local:BlockTemplate>

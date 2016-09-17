@@ -69,32 +69,32 @@ namespace NewEPL {
         NinePatch Patch;
 
         public Block(string path, double x, double y, double width, double height, BlockType type) {
-            Patch = new NinePatch(path.Split('.')[0] + ".9.png");
-            Patch.ClearCache();
+            //Patch = new NinePatch(path.Split('.')[0] + ".9.png");
+            //Patch.ClearCache();
 
-            var patchedImage = Patch.GetPatchedImage((int)width, (int)height);
+            //var patchedImage = null;
 
-            var t = new ControlTemplate();
-            var f = new FrameworkElementFactory(typeof(Image));
-            f.SetValue(FrameworkElement.WidthProperty, width * 0.8);
-            f.SetValue(FrameworkElement.HeightProperty, height * 0.8);
-            f.SetValue(Image.SourceProperty, patchedImage);
-            t.VisualTree = f;
-            Template = t; 
+            //var t = new ControlTemplate();
+            //var f = new FrameworkElementFactory(typeof(Image));
+            //f.SetValue(FrameworkElement.WidthProperty, width * 0.8);
+            //f.SetValue(FrameworkElement.HeightProperty, height * 0.8);
+            //f.SetValue(Image.SourceProperty, patchedImage);
+            //t.VisualTree = f;
+            //Template = t; 
 
-            X = x;
-            Y = y;
+            //X = x;
+            //Y = y;
             
-            Width = patchedImage.Width * 0.8;
-            Height = patchedImage.Height * 0.8;
-            DefaultWidth = width;
-            DefaultHeight = height;
+            //Width = patchedImage.Width * 0.8;
+            //Height = patchedImage.Height * 0.8;
+            //DefaultWidth = width;
+            //DefaultHeight = height;
 
-            //MessageBox.Show(Width.ToString());
+            ////MessageBox.Show(Width.ToString());
 
-            Type = type;
+            //Type = type;
 
-            UpdateColSize();
+            //UpdateColSize();
         }
         
         public void MoveBlocks(double x, double y) {
@@ -129,7 +129,7 @@ namespace NewEPL {
             var f = new FrameworkElementFactory(typeof(Image));
             f.SetValue(FrameworkElement.WidthProperty, (double)width * 0.8);
             f.SetValue(FrameworkElement.HeightProperty, (double)height * 0.8);
-            f.SetValue(Image.SourceProperty, Patch.GetPatchedImage(width, height));
+            //f.SetValue(Image.SourceProperty, Patch.GetPatchedImage(width, height));
             t.VisualTree = f;
             Template = t;
 

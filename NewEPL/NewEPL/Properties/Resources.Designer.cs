@@ -101,11 +101,61 @@ namespace NewEPL.Properties {
         }
         
         /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap block_normal1_9 {
+            get {
+                object obj = ResourceManager.GetObject("block_normal1_9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap block_wrap1_9 {
+            get {
+                object obj = ResourceManager.GetObject("block_wrap1_9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
         internal static byte[] middle_lang {
             get {
                 object obj = ResourceManager.GetObject("middle_lang", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] NanumGothic {
+            get {
+                object obj = ResourceManager.GetObject("NanumGothic", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] NanumGothicBold {
+            get {
+                object obj = ResourceManager.GetObject("NanumGothicBold", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static byte[] NanumGothicExtraBold {
+            get {
+                object obj = ResourceManager.GetObject("NanumGothicExtraBold", resourceCulture);
                 return ((byte[])(obj));
             }
         }

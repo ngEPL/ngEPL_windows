@@ -64,7 +64,7 @@ namespace NewEPL {
                 h = image.Patch.Height;
             }
 
-            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, (int)(ActualHeight + height));
+            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, (int)(ActualHeight + height), image.Color);
 
             /// 모든 자식 크기만큼 늘어나게 해야할듯.
             UpdateSplicer(image, (int)image.Patch.Width, (int)(ActualHeight + height));

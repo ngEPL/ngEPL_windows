@@ -135,6 +135,9 @@
     <None Include="Resources\middle_lang.mocca">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Resource Include="Resources\NanumGothic.ttf" />
+    <Resource Include="Resources\NanumGothicBold.ttf" />
+    <Resource Include="Resources\NanumGothicExtraBold.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -156,6 +159,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\block_motion_move.9.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\block_normal1.9.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\block_wrap1.9.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
