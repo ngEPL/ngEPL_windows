@@ -31,6 +31,17 @@ namespace NewEPL {
         public double DifX = 0;
         public double DifY = 0;
 
+        public int ZIndex {
+            get {
+                return Canvas.GetZIndex(this);
+            }
+            set {
+                Canvas.SetZIndex(this, value);
+            }
+        }
+
+        public int TempZIndex = 0;
+
         public BlockTemplate BlockParent = null;
         public Splicer SplicerParent = null;
 
@@ -63,6 +74,8 @@ namespace NewEPL {
                 }
             }
 
+            b.ZIndex = 0;
+
             return ret;
         }
 
@@ -78,6 +91,32 @@ namespace NewEPL {
             }
         }
 
+        private void SetZIndex(int zindex) {
+            ZIndex = zindex;
+            TempZIndex = zindex;
+
+            foreach (var i in GetSplicers(1)) {
+                var splicer = (Splicer)VisualTreeHelper.GetChild(i, 0);
+
+                foreach (var j in splicer.BlockChildren) {
+                    j.SetZIndex(ZIndex + 1);
+                }
+            }
+        }
+
+        private void SetTempZIndex(int zindex) {
+            TempZIndex = ZIndex;
+            ZIndex = zindex;
+
+            foreach (var i in GetSplicers(1)) {
+                var splicer = (Splicer)VisualTreeHelper.GetChild(i, 0);
+
+                foreach (var j in splicer.BlockChildren) {
+                    j.SetTempZIndex(ZIndex + 1);
+                }
+            }
+        }
+
         public void AddChild(BlockTemplate child, Border border) {
             var splicer = (Splicer)VisualTreeHelper.GetChild(border as DependencyObject, 0);
             (child.Content as BlockTemplate).BlockParent = this;
@@ -86,6 +125,7 @@ namespace NewEPL {
             child.MoveBlocks(X + Canvas.GetLeft(border), Y + Canvas.GetTop(border));
             child.DifX = -(this.X - child.X);
             child.DifY = -(this.Y - child.Y);
+            SetZIndex(ZIndex + 1);
         }
 
         public Thumb GetThumb() {
@@ -163,26 +203,24 @@ namespace NewEPL {
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i, 0);
 
                 foreach(var j in splicer.BlockChildren) {
-                    ret += (j.Content as BlockTemplate).GetTotalHeight();
+                    ret += (j.Content as BlockTemplate).GetTotalHeight() - 10;
                 }
             }
 
             return ret;
         }
 
-        public virtual BlockTemplate Resize(Splicer what, double width, double height) {
+        public virtual BlockTemplate Resize(Splicer what, double width, double height, int cnt) {
             if(BlockParent != null) {
-                (BlockParent.Content as BlockTemplate).Resize(what, 0, height);
+                (BlockParent.Content as BlockTemplate).Resize(what, 0, height, cnt + 1);
             }
             return this;
         }
-
+        
         private static void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
 
-            /// 이프문 블럭같은 경우 이프문 안쪽에 들어가는 블록이 존재하는데 
-            /// 이프문의 zindex가 안쪽의 블록보다 높을 경우 안쪽의 블록을 선택할 수 없는 문제가 있음.
-            Canvas.SetZIndex(b, 1000000);
+            b.SetTempZIndex(99999999);
 
             b.Main = (MainWindow)Window.GetWindow(b);
         }
@@ -232,28 +270,27 @@ namespace NewEPL {
                         Canvas.SetTop(b.Main.TestPreview, other.Y + Canvas.GetTop(otherBorder));
                         b.Main.TestPreview.Visibility = Visibility.Visible;
 
-                        if (!b.IsResized) {
-                            (((otherBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight());
+                        //if (!b.IsResized) {
+                        //    (((otherBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight());
 
-                            b.CollideBorder = otherBorder;
-                            b.CollideSplicer = otherSplicer;
+                        //    b.CollideBorder = otherBorder;
+                        //    b.CollideSplicer = otherSplicer;
 
-                            b.IsResized = true;
-                        }
+                        //    b.IsResized = true;
+                        //}
 
-                        isCollision = true;
                         escaper = true;
                         break;
                     }
                 }
             }
 
-            if(!isCollision) {
-                if (b.IsResized) {
-                    (((b.CollideBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).Resize(b.CollideSplicer, 0, -(b.Content as BlockTemplate).GetTotalHeight());
-                }
-                b.IsResized = false;
-            }
+            //if(!isCollision) {
+            //    if (b.IsResized) {
+            //        (((b.CollideBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).Resize(b.CollideSplicer, 0, -(b.Content as BlockTemplate).GetTotalHeight());
+            //    }
+            //    b.IsResized = false;
+            //}
         }
 
         /// 추가해야하는 기능. 겹치는 두 블록 그룹에 자식을 추가할 때 마우스 포인터와 충돌해 있는 블록 그룹에 자식이 붙어야 함.
@@ -282,14 +319,25 @@ namespace NewEPL {
                         other.AddChild(b, j);
                         b.Main.TestPreview.Visibility = Visibility.Hidden;
 
-                        if ((b.Content as BlockTemplate).BlockParent != null) {
-                            //((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight() * 1.25);
+                        if (!b.IsResized) {
+                            (((otherBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight(), 0);
+
+                            //b.CollideBorder = otherBorder;
+                            //b.CollideSplicer = otherSplicer;
+
+                            //b.IsResized = true;
                         }
+
+                        //if ((b.Content as BlockTemplate).BlockParent != null) {
+                        //    //((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight() * 1.25);
+                        //}
                         escaper = true;
                         break;
                     }
                 }
             }
+
+            b.SetZIndex(b.TempZIndex);
         }
     }
 }

@@ -113,6 +113,16 @@ namespace NewEPL.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap block_start_9 {
+            get {
+                object obj = ResourceManager.GetObject("block_start_9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap block_wrap1_9 {
             get {
                 object obj = ResourceManager.GetObject("block_wrap1_9", resourceCulture);

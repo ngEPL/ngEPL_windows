@@ -8,6 +8,8 @@ namespace NewEPL {
     /// BlockTest1.xaml에 대한 상호 작용 논리
     /// </summary>
     public partial class BlockControlIf : BlockTemplate {
+        double CalcHeight = 88;
+        
         public BlockControlIf() {
             InitializeComponent();
         }
@@ -21,18 +23,14 @@ namespace NewEPL {
                 if (splicer.YStack == 0) continue;
 
                 foreach (var j in splicer.BlockChildren) {
-                    ret += (j.Content as BlockTemplate).GetTotalHeight();
+                    ret += (j.Content as BlockTemplate).GetTotalHeight() - 10;
                 }
             }
 
             return ret;
         }
 
-        public override BlockTemplate Resize(Splicer what, double width, double height) {
-
-            if (BlockParent != null) {
-                (BlockParent.Content as BlockTemplate).Resize(what, 0, height);
-            }
+        public override BlockTemplate Resize(Splicer what, double width, double height, int cnt) {
 
             /// 나중에 스플라이서마다 이름을 지정할 예정
             var parentBlock = (BlockTemplate)(((what.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
@@ -41,6 +39,7 @@ namespace NewEPL {
             while(true) {
                 if (this.Equals(parentBlock)) {
                     if (parentSplicer.YStack == 1) {
+                        if (BlockParent != null) (BlockParent.Content as BlockTemplate).Resize(what, 0, height, cnt + 1);
                         return this;
                     }
                 }
@@ -54,21 +53,12 @@ namespace NewEPL {
             var thumb = GetThumb();
             var image = (Image9)thumb.Template.FindName("image", thumb);
 
-            double w = width;
-            double h = height;
+            CalcHeight += height - 10;
 
-            if (Double.IsNaN(width)) {
-                w = image.Patch.Width;
-            }
-            if (Double.IsNaN(height)) {
-                h = image.Patch.Height;
-            }
-
-            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, (int)(ActualHeight + height), image.Color);
-
-            /// 모든 자식 크기만큼 늘어나게 해야할듯.
-            UpdateSplicer(image, (int)image.Patch.Width, (int)(ActualHeight + height));
-            
+            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, (int)CalcHeight, image.Color);
+           
+            UpdateSplicer(image, (int)image.Patch.Width, (int)CalcHeight);
+        
             foreach (var i in GetSplicers(1)) {
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
                 foreach (var j in splicer.BlockChildren) {
@@ -76,6 +66,13 @@ namespace NewEPL {
                     j.DifX = -((Parent as BlockTemplate).X - j.X);
                     j.DifY = -((Parent as BlockTemplate).Y - j.Y);
                 }
+            }
+
+            if (BlockParent != null) {
+                if (cnt == 0)
+                    (BlockParent.Content as BlockTemplate).Resize(what, 0, height - 32, cnt + 1);
+                else
+                    (BlockParent.Content as BlockTemplate).Resize(what, 0, height, cnt + 1);
             }
 
             return this;

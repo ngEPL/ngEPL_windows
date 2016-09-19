@@ -188,7 +188,7 @@ namespace NewEPL {
                         j.IsResized = true;
                         j.CollideBorder = splicers[i];
                         j.CollideSplicer = splicer;
-                         (parent.Content as BlockTemplate).Resize(splicer, 0, (j.Content as BlockTemplate).GetTotalHeight());
+                         (parent.Content as BlockTemplate).Resize(splicer, 0, (j.Content as BlockTemplate).GetTotalHeight(), 0);
                     }
                     BlockRefresh(j);
                 }
