@@ -36,12 +36,14 @@ namespace NewEPL {
 
             var blockGroupMotion = new List<BlockData>();
             blockGroupMotion.Add(new BlockData() { Template = new BlockMotionMove() { Width = 180 } });
+            blockGroupMotion.Add(new BlockData() { Template = new BlockMotionDef() { Width = 260 } });
 
             var blockGroupEvent = new List<BlockData>();
             blockGroupEvent.Add(new BlockData() { Template = new BlockEventStart() { Width = 180 } });
 
             var blockGroupControl = new List<BlockData>();
             blockGroupControl.Add(new BlockData() { Template = new BlockControlIf() { Width = 210 } });
+            blockGroupControl.Add(new BlockData() { Template = new BlockControlWhile() { Width = 210 } });
             blockGroupControl.Add(new BlockData() { Template = new BlockControlStop() { Width = 180 } });
 
             var blockGroupSensing = new List<BlockData>();
@@ -122,7 +124,7 @@ namespace NewEPL {
             return ret;
         }
 
-        public BlockTemplate Cursor = null;
+        public new BlockTemplate Cursor = null;
 
         /// 이름 수정하기
         private void AAA(MoccaSuite s) {
@@ -131,8 +133,15 @@ namespace NewEPL {
             if (type == typeof(MoccaCommand)) {
                 MoccaCommand suite = (MoccaCommand)s;
 
+                Type blockType = null;
+                switch(suite.name) {
+                case "def": blockType = typeof(BlockMotionDef); break;
+                case "cmd": blockType = typeof(BlockMotionMove); break;
+                default: blockType = typeof(BlockMotionMove); break;
+                }
+
                 var block = new BlockTemplate();
-                block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockMotionMove)));
+                block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(blockType));
                 block.X = 0;
                 block.Y = 0;
                 Cursor.AddChild(block, Cursor.GetSplicers(1)[0]);
@@ -169,6 +178,27 @@ namespace NewEPL {
             } else if (type == typeof(MoccaWhile)) {
                 MoccaWhile suite = (MoccaWhile)s;
 
+                var block = new BlockTemplate();
+                block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockControlWhile)));
+                block.X = 0;
+                block.Y = 0;
+
+                foreach (var i in Cursor.GetSplicers(1)) {
+                    if (((Splicer)VisualTreeHelper.GetChild(i, 0)).YStack == 1) {
+                        Cursor.AddChild(block, i);
+                        break;
+                    }
+                }
+
+                BlockCanvas.Children.Add(block);
+
+                Cursor = block;
+                for (int i = 0; i < suite.cmd_list.Count; i++) {
+                    AAA(suite.cmd_list[i]);
+                }
+
+                Cursor = block;
+
             } else if (type == typeof(MoccaArray)) {
                 MoccaArray suite = (MoccaArray)s;
 
@@ -184,11 +214,11 @@ namespace NewEPL {
             for (int i = 0; i < splicers.Count; i++) {
                 var splicer = (Splicer)VisualTreeHelper.GetChild(splicers[i], 0);
                 foreach (var j in splicer.BlockChildren) {
-                    if (i != splicers.Count - 1 && parent.Content.GetType() == typeof(BlockControlIf)) {
+                    if (i != splicers.Count - 1 && (parent.Content.GetType() == typeof(BlockControlIf) || parent.Content.GetType() == typeof(BlockControlWhile))) {
                         j.IsResized = true;
                         j.CollideBorder = splicers[i];
                         j.CollideSplicer = splicer;
-                         (parent.Content as BlockTemplate).Resize(splicer, 0, (j.Content as BlockTemplate).GetTotalHeight(), 0);
+                         (parent.Content as BlockTemplate).IncreaseSize(splicer, 0, (j.Content as BlockTemplate).GetTotalHeight(), 0);
                     }
                     BlockRefresh(j);
                 }

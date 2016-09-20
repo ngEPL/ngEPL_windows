@@ -61,6 +61,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Block\BlockControlWhile.xaml.cs">
+      <DependentUpon>BlockControlWhile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Block\BlockMotionDef.xaml.cs">
+      <DependentUpon>BlockMotionDef.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DragExtensions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -68,6 +74,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Splicer.cs" />
+    <Page Include="Block\BlockControlWhile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Block\BlockControlIf.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -77,6 +87,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Block\BlockControlStop.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Block\BlockMotionDef.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

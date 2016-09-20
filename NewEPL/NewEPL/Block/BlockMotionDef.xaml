@@ -1,0 +1,32 @@
+﻿<local:BlockTemplate x:Class="NewEPL.BlockMotionDef"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NewEPL"
+             mc:Ignorable="d" 
+             d:DesignHeight="17" d:DesignWidth="49">
+    <Grid>
+        <Thumb>
+            <Thumb.Template>
+                <ControlTemplate>
+                    <local:Image9 x:Name="image" DefaultWidth="260" DefaultHeight="64" Color="#6EDAFD" SourceUrl="pack://siteoforigin:,,,/Resources/block_normal1.9.png" />
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>
+        <Canvas>
+            <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
+                <local:Splicer Width="NaN" Height="12" Type="False" X="0" Y="0" YStack="0"/>
+            </Border>
+            <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
+                <local:Splicer Width="NaN" Height="12" Type="True" X="0" Y="8" YStack="1"/>
+            </Border>
+        </Canvas>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="40" VerticalAlignment="Top" Margin="0,7,0,0" IsHitTestVisible="False">
+            <TextBox VerticalAlignment="Center" Margin="0,11" MinWidth="20" BorderThickness="0" Foreground="Gray" />
+            <Label VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="을(를)"/>
+            <TextBox VerticalAlignment="Center" Margin="0,11" MinWidth="20" BorderThickness="0" Foreground="Gray" />
+            <Label VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="(으)로 정의하기"/>
+        </StackPanel>
+    </Grid>
+</local:BlockTemplate>

@@ -210,13 +210,20 @@ namespace NewEPL {
             return ret;
         }
 
-        public virtual BlockTemplate Resize(Splicer what, double width, double height, int cnt) {
+        public virtual BlockTemplate IncreaseSize(Splicer what, double width, double height, int cnt) {
             if(BlockParent != null) {
-                (BlockParent.Content as BlockTemplate).Resize(what, 0, height, cnt + 1);
+                (BlockParent.Content as BlockTemplate).IncreaseSize(what, 0, height, cnt + 1);
             }
             return this;
         }
-        
+
+        public virtual BlockTemplate DecreaseSize(Splicer what, double width, double height, int cnt) {
+            if (BlockParent != null) {
+                (BlockParent.Content as BlockTemplate).DecreaseSize(what, 0, height, cnt + 1);
+            }
+            return this;
+        }
+
         private static void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
             var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
 
@@ -270,14 +277,9 @@ namespace NewEPL {
                         Canvas.SetTop(b.Main.TestPreview, other.Y + Canvas.GetTop(otherBorder));
                         b.Main.TestPreview.Visibility = Visibility.Visible;
 
-                        //if (!b.IsResized) {
-                        //    (((otherBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight());
-
-                        //    b.CollideBorder = otherBorder;
-                        //    b.CollideSplicer = otherSplicer;
-
-                        //    b.IsResized = true;
-                        //}
+                        b.CollideBorder = otherBorder;
+                        b.CollideSplicer = otherSplicer;
+                        isCollision = true;
 
                         escaper = true;
                         break;
@@ -285,12 +287,12 @@ namespace NewEPL {
                 }
             }
 
-            //if(!isCollision) {
-            //    if (b.IsResized) {
-            //        (((b.CollideBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).Resize(b.CollideSplicer, 0, -(b.Content as BlockTemplate).GetTotalHeight());
-            //    }
-            //    b.IsResized = false;
-            //}
+            if (!isCollision) {
+                if (b.IsResized) {
+                    (((b.CollideBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).DecreaseSize(b.CollideSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight(), 0);
+                    b.IsResized = false;
+                }
+            }
         }
 
         /// 추가해야하는 기능. 겹치는 두 블록 그룹에 자식을 추가할 때 마우스 포인터와 충돌해 있는 블록 그룹에 자식이 붙어야 함.
@@ -320,17 +322,10 @@ namespace NewEPL {
                         b.Main.TestPreview.Visibility = Visibility.Hidden;
 
                         if (!b.IsResized) {
-                            (((otherBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight(), 0);
-
-                            //b.CollideBorder = otherBorder;
-                            //b.CollideSplicer = otherSplicer;
-
-                            //b.IsResized = true;
+                            (((otherBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).IncreaseSize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight(), 0);
+                            b.IsResized = true;
                         }
 
-                        //if ((b.Content as BlockTemplate).BlockParent != null) {
-                        //    //((b.Content as BlockTemplate).BlockParent.Content as BlockTemplate).Resize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight() * 1.25);
-                        //}
                         escaper = true;
                         break;
                     }
