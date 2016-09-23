@@ -30,7 +30,7 @@ namespace NewEPL {
             return ret;
         }
 
-        public override BlockTemplate IncreaseSize(Splicer what, double width, double height, int cnt) {
+        public override void IncreaseHeight(Splicer what, double height, int lv) {
 
             /// 나중에 스플라이서마다 이름을 지정할 예정
             var parentBlock = (BlockTemplate)(((what.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
@@ -39,8 +39,8 @@ namespace NewEPL {
             while (true) {
                 if (this.Equals(parentBlock)) {
                     if (parentSplicer.YStack == 1) {
-                        if (BlockParent != null) (BlockParent.Content as BlockTemplate).IncreaseSize(what, 0, height, cnt + 1);
-                        return this;
+                        if (BlockParent != null) (BlockParent.Content as BlockTemplate).IncreaseHeight(what, height, lv + 1);
+                        return;
                     }
                 }
                 if (parentBlock.BlockParent == null) {
@@ -69,16 +69,14 @@ namespace NewEPL {
             }
 
             if (BlockParent != null) {
-                if (cnt == 0)
-                    (BlockParent.Content as BlockTemplate).IncreaseSize(what, 0, height - 32, cnt + 1);
+                if (lv == 0)
+                    (BlockParent.Content as BlockTemplate).IncreaseHeight(what, height - 32, lv + 1);
                 else
-                    (BlockParent.Content as BlockTemplate).IncreaseSize(what, 0, height, cnt + 1);
+                    (BlockParent.Content as BlockTemplate).IncreaseHeight(what, height, lv + 1);
             }
-
-            return this;
         }
 
-        public override BlockTemplate DecreaseSize(Splicer what, double width, double height, int cnt) {
+        public override void DecreaseHeight(Splicer what, double height, int lv) {
 
             /// 나중에 스플라이서마다 이름을 지정할 예정
             var parentBlock = (BlockTemplate)(((what.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
@@ -87,8 +85,8 @@ namespace NewEPL {
             while (true) {
                 if (this.Equals(parentBlock)) {
                     if (parentSplicer.YStack == 1) {
-                        if (BlockParent != null) (BlockParent.Content as BlockTemplate).DecreaseSize(what, 0, height, cnt + 1);
-                        return this;
+                        if (BlockParent != null) (BlockParent.Content as BlockTemplate).DecreaseHeight(what, height, lv + 1);
+                        return;
                     }
                 }
                 if (parentBlock.BlockParent == null) {
@@ -103,9 +101,9 @@ namespace NewEPL {
 
             CalcHeight -= height - 10;
 
-            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, (int)CalcHeight, image.Color);
+            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, Math.Max((int)CalcHeight, 120), image.Color);
 
-            UpdateSplicer(image, (int)image.Patch.Width, (int)CalcHeight);
+            UpdateSplicer(image, (int)image.Patch.Width, Math.Max((int)CalcHeight, 120));
 
             foreach (var i in GetSplicers(1)) {
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
@@ -117,13 +115,11 @@ namespace NewEPL {
             }
 
             if (BlockParent != null) {
-                if (cnt == 0)
-                    (BlockParent.Content as BlockTemplate).DecreaseSize(what, 0, height - 32, cnt + 1);
+                if (lv == 0)
+                    (BlockParent.Content as BlockTemplate).DecreaseHeight(what, height - 32, lv + 1);
                 else
-                    (BlockParent.Content as BlockTemplate).DecreaseSize(what, 0, height, cnt + 1);
+                    (BlockParent.Content as BlockTemplate).DecreaseHeight(what, height, lv + 1);
             }
-
-            return this;
         }
     }
 }

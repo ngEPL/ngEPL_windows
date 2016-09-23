@@ -214,11 +214,11 @@ namespace NewEPL {
             for (int i = 0; i < splicers.Count; i++) {
                 var splicer = (Splicer)VisualTreeHelper.GetChild(splicers[i], 0);
                 foreach (var j in splicer.BlockChildren) {
+                    j.IsResized = true;
                     if (i != splicers.Count - 1 && (parent.Content.GetType() == typeof(BlockControlIf) || parent.Content.GetType() == typeof(BlockControlWhile))) {
-                        j.IsResized = true;
                         j.CollideBorder = splicers[i];
                         j.CollideSplicer = splicer;
-                         (parent.Content as BlockTemplate).IncreaseSize(splicer, 0, (j.Content as BlockTemplate).GetTotalHeight(), 0);
+                         (parent.Content as BlockTemplate).IncreaseHeight(splicer, (j.Content as BlockTemplate).GetTotalHeight(), 0);
                     }
                     BlockRefresh(j);
                 }

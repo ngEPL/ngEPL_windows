@@ -210,18 +210,27 @@ namespace NewEPL {
             return ret;
         }
 
-        public virtual BlockTemplate IncreaseSize(Splicer what, double width, double height, int cnt) {
-            if(BlockParent != null) {
-                (BlockParent.Content as BlockTemplate).IncreaseSize(what, 0, height, cnt + 1);
-            }
-            return this;
+        public virtual void IncreaseWidth(double width) {
+            var thumb = GetThumb();
+            var image = (Image9)thumb.Template.FindName("image", thumb);
+
+            image.Source = image.Patch.GetPatchedImage((int)(image.ActualWidth + width), (int)image.ActualHeight, image.Color);
+
+            UpdateSplicer(image, (int)(image.ActualWidth + width), (int)image.ActualHeight);
+
+            (Content as BlockTemplate).Width = image.ActualWidth + width;
         }
 
-        public virtual BlockTemplate DecreaseSize(Splicer what, double width, double height, int cnt) {
+        public virtual void IncreaseHeight(Splicer what, double height, int lv) {
             if (BlockParent != null) {
-                (BlockParent.Content as BlockTemplate).DecreaseSize(what, 0, height, cnt + 1);
+                (BlockParent.Content as BlockTemplate).IncreaseHeight(what, height, lv + 1);
             }
-            return this;
+        }
+
+        public virtual void DecreaseHeight(Splicer what, double height, int lv) {
+            if (BlockParent != null) {
+                (BlockParent.Content as BlockTemplate).DecreaseHeight(what, height, lv + 1);
+            }
         }
 
         private static void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
@@ -243,8 +252,8 @@ namespace NewEPL {
             b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
 
             //var canvas = (b.Parent as Canvas);
-            //b.X = Math.Min(Math.Max(0, b.X), canvas.ActualWidth - b.ActualWidth);
-            //b.Y = Math.Min(Math.Max(0, b.Y), canvas.ActualHeight - b.ActualHeight);
+            //b.X = Math.Min(0, canvas.ActualWidth - b.ActualWidth);
+            //b.Y = Math.Min(0, canvas.ActualHeight - b.ActualHeight);
 
             //b.MoveBlocks(b.X, b.Y);
 
@@ -289,7 +298,7 @@ namespace NewEPL {
 
             if (!isCollision) {
                 if (b.IsResized) {
-                    (((b.CollideBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).DecreaseSize(b.CollideSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight(), 0);
+                    (((b.CollideBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).DecreaseHeight(b.CollideSplicer, (b.Content as BlockTemplate).GetTotalHeight(), 0);
                     b.IsResized = false;
                 }
             }
@@ -322,7 +331,7 @@ namespace NewEPL {
                         b.Main.TestPreview.Visibility = Visibility.Hidden;
 
                         if (!b.IsResized) {
-                            (((otherBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).IncreaseSize(otherSplicer, 0, (b.Content as BlockTemplate).GetTotalHeight(), 0);
+                            (((otherBorder.Parent as Canvas).Parent as Grid).Parent as BlockTemplate).IncreaseHeight(otherSplicer, (b.Content as BlockTemplate).GetTotalHeight(), 0);
                             b.IsResized = true;
                         }
 

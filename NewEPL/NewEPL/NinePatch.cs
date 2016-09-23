@@ -92,8 +92,6 @@ namespace NewEPL {
                 int sourceY = yMapping[row];
                 for (int col = 0; col < targetWidth; col++) {
                     int sourceX = xMapping[col];
-                    //for (int i = 0; i < 3; i++)
-                    //    pixelsId[index++] = (byte)(srcPixels[sourceY * targetWidth * 4 + sourceX * 4 + i] + 30);
                     pixelsId[index++] = (byte)(srcPixels[sourceY * targetWidth * 4 + sourceX * 4 + 0] * (color.B / 255.0)); /// b
                     pixelsId[index++] = (byte)(srcPixels[sourceY * targetWidth * 4 + sourceX * 4 + 1] * (color.G / 255.0)); /// g
                     pixelsId[index++] = (byte)(srcPixels[sourceY * targetWidth * 4 + sourceX * 4 + 2] * (color.R / 255.0)); /// r
