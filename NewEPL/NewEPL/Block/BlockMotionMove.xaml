@@ -22,8 +22,8 @@
                 <local:Splicer Width="NaN" Height="12" Type="True" X="0" Y="8" YStack="1"/>
             </Border>
         </Canvas>
-        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="40" VerticalAlignment="Top" Margin="0,7,0,0">
-            <TextBox VerticalAlignment="Center" Margin="0,11" MinWidth="20" BorderThickness="0" Foreground="Gray" />
+        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="40" VerticalAlignment="Top" Margin="9,7,0,0">
+            <TextBox VerticalAlignment="Center" MinWidth="40" BorderThickness="0" Foreground="Gray" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" />
             <Label IsHitTestVisible="False" VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="만큼 움직이기"/>
         </StackPanel>
     </Grid>

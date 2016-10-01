@@ -8,6 +8,9 @@ using System.Windows.Media;
 namespace NewEPL {
     public class BlockTemplate : UserControl{
 
+        /// <summary>
+        /// ZIndex지정을 위한 변수
+        /// </summary>
         MainWindow Main;
 
         public double X {
@@ -28,6 +31,9 @@ namespace NewEPL {
             }
         }
 
+        /// <summary>
+        /// 부모 블록과 상대적인 거리 차이
+        /// </summary>
         public double DifX = 0;
         public double DifY = 0;
 
@@ -40,16 +46,43 @@ namespace NewEPL {
             }
         }
 
+        /// <summary>
+        /// 블록을 드래그 해서 ZIndex를 변경할 때 임시로 현재 ZIndex를 담아두는 변수
+        /// </summary>
         public int TempZIndex = 0;
 
+        /// <summary>
+        /// 부모 블록
+        /// </summary>
         public BlockTemplate BlockParent = null;
+
+        /// <summary>
+        /// 부모 연결자
+        /// </summary>
         public Splicer SplicerParent = null;
 
         public bool IsResized = false;
 
+        /// <summary>
+        ///  고유 코드
+        /// </summary>
+        public static readonly DependencyProperty IdProperty;
+        public string Id { 
+            get { return (string)GetValue(IdProperty); }
+            set { SetValue(IdProperty, value); }
+        }
+
+        public object LValue = null;
+        public object RValue = null;
+
         static BlockTemplate() {
         }
 
+        /// <summary>
+        /// 블록 생성할 때 블록 리스트에 있는 선택된 블록을 복사하는 함수.
+        /// </summary>
+        /// <param name="b">선택된 블록</param>
+        /// <returns>복제된 블록</returns>
         public static BlockTemplate CopyBlockContent(BlockTemplate b) {
             var ret = (BlockTemplate)Activator.CreateInstance(b.GetType());
             var thumb = ret.GetThumb();
@@ -70,7 +103,7 @@ namespace NewEPL {
                 Canvas.SetTop(border, (splicer.Y + (image.Patch.GetImmutableHeight(splicer.YStack) + image.Patch.GetStrectedHeight(image.DefaultHeight)) * splicer.YStack));
 
                 if (Double.IsNaN(splicer.Width)) {
-                    splicer.Width = ret.Width + splicer.RelativeWidth; /// 0.8 -> 배율
+                    splicer.Width = ret.Width + splicer.RelativeWidth;
                 }
             }
 
@@ -195,7 +228,7 @@ namespace NewEPL {
             return new Rect(X + Canvas.GetLeft(border), Y + Canvas.GetTop(border), splicer.Width, splicer.Height);
         }
 
-        // 블록마다 길이 구하는 방식이 다를 수 있음 (IF블록 같은 경우 안쪽 자식 블록은 계산하지 않고 밑 블록만 계산에 넣음)
+        /// 블록마다 길이 구하는 방식이 다를 수 있음 (IF블록 같은 경우 안쪽 자식 블록은 계산하지 않고 밑 블록만 계산에 넣음)
         public virtual double GetTotalHeight() {
             double ret = ActualHeight;
 
@@ -210,15 +243,15 @@ namespace NewEPL {
             return ret;
         }
 
-        public virtual void IncreaseWidth(double width) {
+        public virtual void SetWidth(double width) {
             var thumb = GetThumb();
             var image = (Image9)thumb.Template.FindName("image", thumb);
 
-            image.Source = image.Patch.GetPatchedImage((int)(image.ActualWidth + width), (int)image.ActualHeight, image.Color);
+            image.Source = image.Patch.GetPatchedImage((int)width, (int)image.ActualHeight, image.Color);
 
-            UpdateSplicer(image, (int)(image.ActualWidth + width), (int)image.ActualHeight);
+            UpdateSplicer(image, (int)width, (int)image.ActualHeight);
 
-            (Content as BlockTemplate).Width = image.ActualWidth + width;
+            (Content as BlockTemplate).Width = width;
         }
 
         public virtual void IncreaseHeight(Splicer what, double height, int lv) {
