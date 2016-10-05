@@ -10,7 +10,7 @@
         <Thumb>
             <Thumb.Template>
                 <ControlTemplate>
-                    <local:Image9 x:Name="image" DefaultWidth="260" DefaultHeight="64" Color="#6EDAFD" SourceUrl="pack://siteoforigin:,,,/Resources/block_normal1.9.png" />
+                    <local:Image9 x:Name="image" DefaultWidth="260" DefaultHeight="64" Color="#6EDAFD" SourceUrl="pack://application:,,,/Resources/block_normal1.9.png" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>

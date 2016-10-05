@@ -6,7 +6,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace NewEPL {
-    public class BlockTemplate : UserControl{
+    public class BlockTemplate : UserControl, ICloneable {
 
         /// <summary>
         /// ZIndex지정을 위한 변수
@@ -83,12 +83,13 @@ namespace NewEPL {
         /// </summary>
         /// <param name="b">선택된 블록</param>
         /// <returns>복제된 블록</returns>
-        public static BlockTemplate CopyBlockContent(BlockTemplate b) {
-            var ret = (BlockTemplate)Activator.CreateInstance(b.GetType());
+
+        public object Clone() {
+            var ret = (BlockTemplate)Activator.CreateInstance(GetType());
             var thumb = ret.GetThumb();
             var canvas = ret.GetCanvas();
 
-            ret.Width = b.Width;
+            ret.Width = Width;
 
             thumb.ApplyTemplate();
             thumb.DragStarted += Thumb_DragStarted;
@@ -106,8 +107,6 @@ namespace NewEPL {
                     splicer.Width = ret.Width + splicer.RelativeWidth;
                 }
             }
-
-            b.ZIndex = 0;
 
             return ret;
         }

@@ -52,8 +52,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mocca">
-      <HintPath>..\..\..\..\Mocca-master\Mocca\bin\Debug\Mocca.dll</HintPath>
+    <Reference Include="Mocca, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Mocca.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -80,10 +81,13 @@
     <Compile Include="Block\BlockControlWhile.xaml.cs">
       <DependentUpon>BlockControlWhile.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Block\BlockOperatorPlus.xaml.cs">
+      <DependentUpon>BlockOperatorPlus.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Block\BlockMotionDef.xaml.cs">
       <DependentUpon>BlockMotionDef.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DragExtensions.cs" />
+    <Compile Include="ExtendedTextBox.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -95,6 +99,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Block\BlockControlIf.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Block\BlockOperatorPlus.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -175,39 +183,25 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_control_if.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Resource Include="Resources\block_control_if.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_control_stop.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Resource Include="Resources\block_control_stop.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_event_start.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Resource Include="Resources\block_event_start.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_motion_move.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Resource Include="Resources\block_motion_move.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_normal1.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Resource Include="Resources\block_normal1.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_wrap1.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Resource Include="Resources\block_wrap1.9.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\block_start.9.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Resource Include="Resources\block_start.9.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -220,6 +214,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\block_mini.9.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -49,9 +49,10 @@ namespace NewEPL {
             var blockGroupSensing = new List<BlockData>();
 
             var blockGroupOperator = new List<BlockData>();
-                
-            var blockGroupData = new List<BlockData>();
+            blockGroupOperator.Add(new BlockData() { Template = new BlockOperatorPlus() { Width = 100 } });
 
+            var blockGroupData = new List<BlockData>();
+                
             ToggleList.Add(new BlockList() { Category = "동작", Source = blockGroupMotion });
             ToggleList.Add(new BlockList() { Category = "이벤트", Source = blockGroupEvent });
             ToggleList.Add(new BlockList() { Category = "컨트롤", Source = blockGroupControl });
@@ -82,8 +83,7 @@ namespace NewEPL {
 
         private void block_Drag(object sender, MouseButtonEventArgs e) {
             var block = sender as BlockTemplate;
-            var clone = BlockTemplate.CopyBlockContent((BlockTemplate)block.Content);
-            var data = new DataObject(typeof(BlockTemplate), clone);
+            var data = new DataObject(typeof(BlockTemplate), (block.Content as BlockTemplate).Clone());
             DragDrop.DoDragDrop(block, data, DragDropEffects.Copy);
         }
 
@@ -141,7 +141,7 @@ namespace NewEPL {
                 }
 
                 var block = new BlockTemplate();
-                block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(blockType));
+                block.Content = GetBlockForList(blockType).Clone();
                 block.X = 0;
                 block.Y = 0;
                 Cursor.AddChild(block, Cursor.GetSplicers(1)[0]);
@@ -155,7 +155,7 @@ namespace NewEPL {
                 MoccaLogic suite = (MoccaLogic)s;
 
                 var block = new BlockTemplate();
-                block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockControlIf)));
+                block.Content = GetBlockForList(typeof(BlockControlIf)).Clone();
                 block.X = 0;
                 block.Y = 0;
 
@@ -179,7 +179,7 @@ namespace NewEPL {
                 MoccaWhile suite = (MoccaWhile)s;
 
                 var block = new BlockTemplate();
-                block.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockControlWhile)));
+                block.Content = GetBlockForList(typeof(BlockControlWhile)).Clone();
                 block.X = 0;
                 block.Y = 0;
 
@@ -238,7 +238,7 @@ namespace NewEPL {
             foreach(var i in Eval) {
                 /// 엔트리 블록 생성
                 var entry = new BlockTemplate();
-                entry.Content = BlockTemplate.CopyBlockContent(GetBlockForList(typeof(BlockEventStart)));
+                entry.Content = GetBlockForList(typeof(BlockEventStart)).Clone();
                 entry.X = i.x;
                 entry.Y = i.y;
                 BlockCanvas.Children.Add(entry);
