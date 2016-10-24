@@ -5,12 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NewEPL"
              mc:Ignorable="d" 
-             d:DesignHeight="17" d:DesignWidth="49">
+             d:DesignHeight="17" d:DesignWidth="49"
+             BlockType="0" >
     <Grid>
         <Thumb>
             <Thumb.Template>
                 <ControlTemplate>
-                    <local:Image9 x:Name="image" DefaultWidth="180" DefaultHeight="72" Color="White" SourceUrl="pack://application:,,,/Resources/block_start.9.png" />
+                    <local:Image9 x:Name="image" DefaultWidth="180" DefaultHeight="72" Color="White" 
+                                  Width0="61"
+                                  Width1="0"
+                                  Width2="0"
+                                  Height0="36"
+                                  Height1="0"
+                                  Height2="0"
+                                  SourceUrl="pack://application:,,,/Resources/block_start.9.png" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>

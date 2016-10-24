@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -8,8 +9,7 @@ namespace NewEPL {
     /// BlockTest1.xaml에 대한 상호 작용 논리
     /// </summary>
     public partial class BlockControlIf : BlockTemplate {
-        double CalcHeight = 88;
-        
+
         public BlockControlIf() {
             InitializeComponent();
         }
@@ -53,11 +53,10 @@ namespace NewEPL {
             var thumb = GetThumb();
             var image = (Image9)thumb.Template.FindName("image", thumb);
 
-            CalcHeight += height - 10;
-
-            image.Source = image.Patch.GetPatchedImage((int)image.ActualWidth, (int)CalcHeight, image.Color);
+            if (lv == 0) image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, (int)height - 42, 0 }, image.Color);
+            else image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, (int)height - 10, 0 }, image.Color);
            
-            UpdateSplicer(image, (int)image.ActualWidth, (int)CalcHeight);
+            UpdateSplicer(image, (int)image.Source.Width, (int)image.Source.Height);
         
             foreach (var i in GetSplicers(1)) {
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
@@ -99,11 +98,10 @@ namespace NewEPL {
             var thumb = GetThumb();
             var image = (Image9)thumb.Template.FindName("image", thumb);
 
-            CalcHeight -= height - 10;
+            if (lv == 0) image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, -((int)height - 42), 0 }, image.Color);
+            else image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, -((int)height - 10), 0 }, image.Color);
 
-            image.Source = image.Patch.GetPatchedImage((int)image.ActualWidth, Math.Max((int)CalcHeight, 120), image.Color);
-
-            UpdateSplicer(image, (int)image.ActualWidth, Math.Max((int)CalcHeight, 120));
+            UpdateSplicer(image, (int)image.Source.Width, (int)image.Source.Height);
 
             foreach (var i in GetSplicers(1)) {
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);

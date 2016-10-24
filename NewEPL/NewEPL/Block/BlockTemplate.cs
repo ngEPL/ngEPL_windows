@@ -11,7 +11,7 @@ namespace NewEPL {
         /// <summary>
         /// ZIndex지정을 위한 변수
         /// </summary>
-        MainWindow Main;
+        public MainWindow Main;
 
         public double X {
             get {
@@ -72,10 +72,19 @@ namespace NewEPL {
             set { SetValue(IdProperty, value); }
         }
 
+        // 나중에 이름 바꾸기
+        public static readonly DependencyProperty BlockTypeProperty;
+        public int BlockType {
+            get { return (int)GetValue(BlockTypeProperty); }
+            set { SetValue(BlockTypeProperty, value); }
+        }
+
         public object LValue = null;
         public object RValue = null;
 
         static BlockTemplate() {
+            IdProperty = DependencyProperty.Register("Id", typeof(string), typeof(BlockTemplate), new UIPropertyMetadata(null));
+            BlockTypeProperty = DependencyProperty.Register("BlockType", typeof(int), typeof(BlockTemplate), new UIPropertyMetadata(null));
         }
 
         /// <summary>
@@ -87,7 +96,7 @@ namespace NewEPL {
         public object Clone() {
             var ret = (BlockTemplate)Activator.CreateInstance(GetType());
             var thumb = ret.GetThumb();
-            var canvas = ret.GetCanvas();
+            var canvas = ret.GetSplicerCanvas();
 
             ret.Width = Width;
 
@@ -107,6 +116,8 @@ namespace NewEPL {
                     splicer.Width = ret.Width + splicer.RelativeWidth;
                 }
             }
+
+            //ret.ZIndex = 0;
 
             return ret;
         }
@@ -161,15 +172,21 @@ namespace NewEPL {
         }
 
         public Thumb GetThumb() {
-            if (this.GetType() == typeof(BlockTemplate))
+            if (GetType() == typeof(BlockTemplate))
                 return (Thumb)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 0);
             return (Thumb)VisualTreeHelper.GetChild((DependencyObject)Content, 0);
         }
 
-        public Canvas GetCanvas() {
-            if (this.GetType() == typeof(BlockTemplate))
+        public Canvas GetSplicerCanvas() {
+            if (GetType() == typeof(BlockTemplate))
                 return (Canvas)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 1);
             return (Canvas)VisualTreeHelper.GetChild((DependencyObject)Content, 1);
+        }
+
+        public StackPanel GetContentPanel() {
+            if (GetType() == typeof(BlockTemplate))
+                return (StackPanel)VisualTreeHelper.GetChild((DependencyObject)(Content as BlockTemplate).Content, 2);
+            return (StackPanel)VisualTreeHelper.GetChild((DependencyObject)Content, 2);
         }
 
         public Splicer GetSplicer(int idx) {
@@ -184,7 +201,7 @@ namespace NewEPL {
         /// <returns></returns>
         public List<Border> GetSplicers(int what) {
             List<Border> ret = new List<Border>();
-            var canvas = GetCanvas();
+            var canvas = GetSplicerCanvas();
 
             foreach(var i in canvas.Children) {
                 var border = (Border)i;//(Border)VisualTreeHelper.GetChild(i as DependencyObject, 0);
@@ -209,7 +226,7 @@ namespace NewEPL {
         }
 
         protected void UpdateSplicer(Image9 image, int width, int height) {
-            var canvas = GetCanvas();
+            var canvas = GetSplicerCanvas();
             foreach (var i in canvas.Children) {
                 var border = i as Border;
                 var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
@@ -217,12 +234,12 @@ namespace NewEPL {
                 Canvas.SetTop(border, (splicer.Y + (image.Patch.GetImmutableHeight(splicer.YStack) + image.Patch.GetStrectedHeight(height)) * splicer.YStack));
 
                 if (Double.IsNaN(splicer.Width)) {
-                    splicer.Width = Width + splicer.RelativeWidth * 0.8; /// 0.8 -> 배율
+                    splicer.Width = Width + splicer.RelativeWidth; /// 0.8 -> 배율
                 }
             }
         }
 
-        private Rect GetBoundingBox(Border border) {
+        public Rect GetBoundingBox(Border border) {
             var splicer = (Splicer)VisualTreeHelper.GetChild(border, 0);
             return new Rect(X + Canvas.GetLeft(border), Y + Canvas.GetTop(border), splicer.Width, splicer.Height);
         }
@@ -246,11 +263,18 @@ namespace NewEPL {
             var thumb = GetThumb();
             var image = (Image9)thumb.Template.FindName("image", thumb);
 
-            image.Source = image.Patch.GetPatchedImage((int)width, (int)image.ActualHeight, image.Color);
+            image.Source = image.Patch.GetPatchedImage(new List<int>() { (int)width, 0, 0 } , new List<int>() { 0, 0, 0 }, image.Color);
+            UpdateSplicer(image, (int)image.Patch.Width, (int)image.Patch.Height);
 
-            UpdateSplicer(image, (int)width, (int)image.ActualHeight);
+            (Content as BlockTemplate).Width = image.Patch.Width;
+        }
 
-            (Content as BlockTemplate).Width = width;
+        public virtual void SetHeight(double height) {
+            var thumb = GetThumb();
+            var image = (Image9)thumb.Template.FindName("image", thumb);
+
+            image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { (int)height, 0, 0 }, image.Color);
+            UpdateSplicer(image, (int)image.Patch.Width, (int)image.Patch.Height);
         }
 
         public virtual void IncreaseHeight(Splicer what, double height, int lv) {
@@ -265,53 +289,27 @@ namespace NewEPL {
             }
         }
 
-        private static void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
-            var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
+        protected virtual void CheckDragAction(BlockTemplate b) {
 
-            b.SetTempZIndex(99999999);
-
-            b.Main = (MainWindow)Window.GetWindow(b);
-        }
-
-        public Border CollideBorder = null;
-        public Splicer CollideSplicer = null;
-
-        /// 이미지 늘어나는 기능을 따로 빼기.
-        private static void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
-            var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
             bool escaper = false;
-
-            b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
-
-            //var canvas = (b.Parent as Canvas);
-            //b.X = Math.Min(0, canvas.ActualWidth - b.ActualWidth);
-            //b.Y = Math.Min(0, canvas.ActualHeight - b.ActualHeight);
-
-            //b.MoveBlocks(b.X, b.Y);
-
-            if ((b.Content as BlockTemplate).BlockParent != null) {
-                (b.Content as BlockTemplate).BlockParent.RemoveChild(b);
-                (b.Content as BlockTemplate).BlockParent = null;
-            }
-
             bool isCollision = false;
+
+            var splicers = b.GetSplicers(0);
 
             foreach (var i in b.Main.BlockCanvas.Children) {
                 if (escaper) break;
                 if (i.GetType() != typeof(BlockTemplate)) continue;
                 if (i.Equals(b)) continue;
-
-                var splicers = b.GetSplicers(0);
                 if (splicers.Count <= 0) continue;
 
                 var other = (BlockTemplate)i;
-                foreach(var j in other.GetSplicers(1)) {
+                foreach (var j in other.GetSplicers(1)) {
                     var thisBorder = splicers[0];
                     var thisSplicer = (Splicer)VisualTreeHelper.GetChild(thisBorder, 0);
                     var otherBorder = (Border)j;
                     var otherSplicer = (Splicer)VisualTreeHelper.GetChild(otherBorder, 0);
 
-                    if(otherSplicer.BlockChildren.Count > 0) continue;
+                    if (otherSplicer.BlockChildren.Count > 0) continue;
 
                     if (b.GetBoundingBox(thisBorder).IntersectsWith(other.GetBoundingBox(otherBorder))) {
                         Canvas.SetLeft(b.Main.TestPreview, other.X + Canvas.GetLeft(otherBorder));
@@ -335,10 +333,9 @@ namespace NewEPL {
                 }
             }
         }
-
-        /// 추가해야하는 기능. 겹치는 두 블록 그룹에 자식을 추가할 때 마우스 포인터와 충돌해 있는 블록 그룹에 자식이 붙어야 함.
-        private static void Thumb_DragCompleted(object sender, DragCompletedEventArgs e) {
-            var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
+        
+        ///  이름 바꾸기
+        protected virtual void CheckDropAction(BlockTemplate b) {
             bool escaper = false;
 
             foreach (var i in b.Main.BlockCanvas.Children) {
@@ -372,8 +369,45 @@ namespace NewEPL {
                     }
                 }
             }
+        }
 
-            b.SetZIndex(b.TempZIndex);
+        public Border CollideBorder = null;
+        public Splicer CollideSplicer = null;
+
+        private static void Thumb_DragStarted(object sender, DragStartedEventArgs e) {
+            var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
+
+            b.SetTempZIndex(99999999);
+
+            b.Main = (MainWindow)Window.GetWindow(b);
+        }
+
+        /// 이미지 늘어나는 기능을 따로 빼기.
+        private static void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
+            var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
+
+            b.MoveBlocks(b.X + e.HorizontalChange, b.Y + e.VerticalChange);
+
+            //var canvas = (b.Parent as Canvas);
+            //b.X = Math.Min(0, canvas.ActualWidth - b.ActualWidth);
+            //b.Y = Math.Min(0, canvas.ActualHeight - b.ActualHeight);
+            //b.MoveBlocks(b.X, b.Y);
+
+            if ((b.Content as BlockTemplate).BlockParent != null) {
+                (b.Content as BlockTemplate).BlockParent.RemoveChild(b);
+                (b.Content as BlockTemplate).BlockParent = null;
+            }
+
+            (b.Content as BlockTemplate).CheckDragAction(b);
+        }
+
+        /// 추가해야하는 기능. 겹치는 두 블록 그룹에 자식을 추가할 때 마우스 포인터와 충돌해 있는 블록 그룹에 자식이 붙어야 함.
+        private static void Thumb_DragCompleted(object sender, DragCompletedEventArgs e) {
+            var b = (((sender as Thumb).Parent as Grid).Parent as BlockTemplate).Parent as BlockTemplate;
+
+            (b.Content as BlockTemplate).CheckDropAction(b);
+
+            b.SetTempZIndex(b.TempZIndex);
         }
     }
 }

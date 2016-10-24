@@ -5,12 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NewEPL"
              mc:Ignorable="d" 
-             d:DesignHeight="17" d:DesignWidth="49">
+             d:DesignHeight="17" d:DesignWidth="49"
+             BlockType="0" >
     <Grid>
         <Thumb>
             <Thumb.Template>
                 <ControlTemplate>
-                    <local:Image9 x:Name="image" DefaultWidth="180" DefaultHeight="64" Color="#D780F8" SourceUrl="pack://application:,,,/Resources/block_normal1.9.png" />
+                    <local:Image9 x:Name="image" DefaultWidth="180" DefaultHeight="64" Color="#D780F8" 
+                                  Width0="90"
+                                  Width1="0"
+                                  Width2="0"
+                                  Height0="36"
+                                  Height1="0"
+                                  Height2="0"
+                                  SourceUrl="pack://application:,,,/Resources/block_normal1.9.png" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
@@ -23,7 +31,7 @@
             </Border>
         </Canvas>
         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="40" VerticalAlignment="Top" Margin="9,7,0,0">
-            <TextBox VerticalAlignment="Center" MinWidth="40" BorderThickness="0" Foreground="Gray" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" />
+            <local:ExtendedTextBox VerticalAlignment="Center" MinWidth="40" BorderThickness="0" Foreground="Gray" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" />
             <Label IsHitTestVisible="False" VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="만큼 움직이기"/>
         </StackPanel>
     </Grid>

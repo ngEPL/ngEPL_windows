@@ -5,12 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NewEPL"
              mc:Ignorable="d" 
-             d:DesignHeight="103" d:DesignWidth="105">
+             d:DesignHeight="103" d:DesignWidth="105"
+             BlockType="0" >
     <Grid>
         <Thumb>
             <Thumb.Template>
                 <ControlTemplate>
-                    <local:Image9 x:Name="image" DefaultWidth="210" DefaultHeight="120" Color="#FE5294" SourceUrl="pack://application:,,,/Resources/block_wrap1.9.png" />
+                    <local:Image9 x:Name="image" DefaultWidth="210" DefaultHeight="120" Color="#FE5294"
+                                  Width0="119"
+                                  Width1="0"
+                                  Width2="0"
+                                  Height0="36"
+                                  Height1="13"
+                                  Height2="0"
+                                  SourceUrl="pack://application:,,,/Resources/block_wrap1.9.png" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
@@ -25,8 +33,8 @@
                 <local:Splicer Width="NaN" RelativeWidth="-16" Height="12" Type="True" X="0" Y="35" YStack="1"/>
             </Border>
         </Canvas>
-        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="32" VerticalAlignment="Top" Margin="0,10,0.333,0" IsHitTestVisible="False">
-            <Label VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="무한 반복" />
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="32" VerticalAlignment="Top" Margin="0,10,0.333,0">
+            <Label VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="무한 반복" IsHitTestVisible="False" />
         </StackPanel>
     </Grid>
 </local:BlockTemplate>

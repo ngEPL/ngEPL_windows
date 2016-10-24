@@ -118,10 +118,25 @@
         </TextBox>-->
 
         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-        <ScrollViewer Grid.Column="2" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-            <Canvas x:Name="BlockCanvas" AllowDrop="True" Background="#00000000" Drop="canvas_Drop" >
-            </Canvas>
-        </ScrollViewer>
+        <Grid Grid.Column="2">
+            <ScrollViewer x:Name="ScrollView" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" MaxWidth="3000" MaxHeight="3000">
+                <Canvas x:Name="BlockCanvas" AllowDrop="True" Background="#00FF00FF" Drop="canvas_Drop" RenderTransformOrigin="0.5,0.5" Width="1600" Height="1600">
+                </Canvas>
+            </ScrollViewer>
+            <StackPanel Margin="0,0,-75,-12" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <StackPanel.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </StackPanel.RenderTransform>
+                <Label FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="-" IsHitTestVisible="False" VerticalAlignment="Center"/>
+                <Slider x:Name="ZoomSlider" Width="95" RenderTransformOrigin="0.5,0.5" Maximum="2" VerticalAlignment="Center" ValueChanged="ZoomSlider_ValueChanged" Value="1" Minimum="0.5" TickPlacement="Both"/>
+                <Label FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="+" IsHitTestVisible="False" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
         <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
         <Label x:Name="test" Content="Label" Grid.Column="4" HorizontalAlignment="Left" Margin="9.667,10,0,0" VerticalAlignment="Top" FontFamily="./Resources/#Free 3 of 9 Extended" />
     </Grid>

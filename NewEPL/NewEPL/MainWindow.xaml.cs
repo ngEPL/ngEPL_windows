@@ -31,6 +31,9 @@ namespace NewEPL {
 
         public MainWindow() {
             InitializeComponent();
+            
+            ScrollView.ScrollToHorizontalOffset(3000 / 2);
+            ScrollView.ScrollToVerticalOffset(3000 / 2);
 
             ToggleList = new List<BlockList>();
 
@@ -44,7 +47,7 @@ namespace NewEPL {
             var blockGroupControl = new List<BlockData>();
             blockGroupControl.Add(new BlockData() { Template = new BlockControlIf() { Width = 210 } });
             blockGroupControl.Add(new BlockData() { Template = new BlockControlWhile() { Width = 210 } });
-            blockGroupControl.Add(new BlockData() { Template = new BlockControlStop() { Width = 180 } });
+            //blockGroupControl.Add(new BlockData() { Template = new BlockControlStop() { Width = 180 } });
 
             var blockGroupSensing = new List<BlockData>();
 
@@ -234,6 +237,8 @@ namespace NewEPL {
             ToggleCheck(Toggle_microbit, true);
             ToggleCheck(Toggle_arduino, true);
 
+            Eval.Clear();
+
             /// 재귀 구조가 필요할 듯.
             foreach(var i in Eval) {
                 /// 엔트리 블록 생성
@@ -266,6 +271,19 @@ namespace NewEPL {
             } else {
                 btn.IsChecked = false;
                 ToggleButton_Unchecked(btn, null);
+            }
+        }
+
+        bool flag = false;
+
+        private void ZoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            double zoom = e.NewValue;
+
+            if (!flag) flag = true;
+            else {
+                //BlockCanvas.Width = 1000 * (2.5 - zoom);
+                //BlockCanvas.Height = 1000 * (2.5 - zoom);
+                BlockCanvas.RenderTransform = new ScaleTransform(zoom, zoom);
             }
         }
     }

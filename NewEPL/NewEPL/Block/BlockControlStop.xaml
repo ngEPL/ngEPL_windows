@@ -5,12 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NewEPL"
              mc:Ignorable="d" 
-             d:DesignHeight="17" d:DesignWidth="49">
+             d:DesignHeight="17" d:DesignWidth="49"
+             BlockType="0" >
     <Grid>
         <Thumb>
             <Thumb.Template>
                 <ControlTemplate>
-                    <local:Image9 x:Name="image" DefaultWidth="180" DefaultHeight="54" Color="White" SourceUrl="pack://application:,,,/Resources/block_control_stop.9.png" />
+                    <local:Image9 x:Name="image" DefaultWidth="180" DefaultHeight="54" Color="White"
+                                  Width0="0"
+                                  Width1="0"
+                                  Width2="0"
+                                  Height0="0"
+                                  Height1="0"
+                                  Height2="0"
+                                  SourceUrl="pack://application:,,,/Resources/block_control_stop.9.png" />
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
@@ -19,8 +27,8 @@
                 <local:Splicer Width="NaN" Height="12" Type="False" X="0" Y="0"  YStack="0"/>
             </Border>
         </Canvas>
-        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="32" VerticalAlignment="Top" Margin="0,10,0.333,0" IsHitTestVisible="False">
-            <Label VerticalAlignment="Center">종료</Label>
+        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="32" VerticalAlignment="Top" Margin="0,10,0.333,0" >
+            <Label VerticalAlignment="Center" IsHitTestVisible="False" >종료</Label>
         </StackPanel>
     </Grid>
 </local:BlockTemplate>
