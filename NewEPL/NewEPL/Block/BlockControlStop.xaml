@@ -23,9 +23,7 @@
             </Thumb.Template>
         </Thumb>
         <Canvas>
-            <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
-                <local:Splicer Width="NaN" Height="12" Type="False" X="0" Y="0"  YStack="0"/>
-            </Border>
+            <local:Splicer Canvas.Left="0" Canvas.Top="0" Width="NaN" Height="12" Type="False" X="0" Y="0"  YStack="0"/>
         </Canvas>
         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Height="32" VerticalAlignment="Top" Margin="0,10,0.333,0" >
             <Label VerticalAlignment="Center" IsHitTestVisible="False" >종료</Label>

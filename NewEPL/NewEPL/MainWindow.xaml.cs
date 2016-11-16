@@ -147,7 +147,7 @@ namespace NewEPL {
                 block.Content = GetBlockForList(blockType).Clone();
                 block.X = 0;
                 block.Y = 0;
-                Cursor.AddChild(block, Cursor.GetSplicers(1)[0]);
+                Cursor.AddChild(block, Cursor.GetSplicers(1, false)[0]);
 
                 BlockCanvas.Children.Add(block);
                 // 내부 블록을 처리해야 함(연산자같은 것).
@@ -162,8 +162,8 @@ namespace NewEPL {
                 block.X = 0;
                 block.Y = 0;
 
-                foreach (var i in Cursor.GetSplicers(1)) {
-                    if (((Splicer)VisualTreeHelper.GetChild(i, 0)).YStack == 1) {
+                foreach (var i in Cursor.GetSplicers(1, false)) {
+                    if (((Splicer)i).YStack == 1) {
                         Cursor.AddChild(block, i);
                         break;
                     }
@@ -186,8 +186,8 @@ namespace NewEPL {
                 block.X = 0;
                 block.Y = 0;
 
-                foreach (var i in Cursor.GetSplicers(1)) {
-                    if (((Splicer)VisualTreeHelper.GetChild(i, 0)).YStack == 1) {
+                foreach (var i in Cursor.GetSplicers(1, false)) {
+                    if (((Splicer)i).YStack == 1) {
                         Cursor.AddChild(block, i);
                         break;
                     }
@@ -213,15 +213,14 @@ namespace NewEPL {
 
         private void BlockRefresh(BlockTemplate parent) {
 
-            var splicers = parent.GetSplicers(1);
+            var splicers = parent.GetSplicers(1, false);
             for (int i = 0; i < splicers.Count; i++) {
-                var splicer = (Splicer)VisualTreeHelper.GetChild(splicers[i], 0);
+                var splicer = (Splicer)splicers[i];
                 foreach (var j in splicer.BlockChildren) {
                     j.IsResized = true;
                     if (i != splicers.Count - 1 && (parent.Content.GetType() == typeof(BlockControlIf) || parent.Content.GetType() == typeof(BlockControlWhile))) {
-                        j.CollideBorder = splicers[i];
                         j.CollideSplicer = splicer;
-                         (parent.Content as BlockTemplate).IncreaseHeight(splicer, (j.Content as BlockTemplate).GetTotalHeight(), 0);
+                        (parent.Content as BlockTemplate).IncreaseHeight(splicer, (j.Content as BlockTemplate).GetTotalHeight(), 0);
                     }
                     BlockRefresh(j);
                 }

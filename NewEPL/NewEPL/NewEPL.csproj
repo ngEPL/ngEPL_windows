@@ -88,6 +88,7 @@
       <DependentUpon>BlockMotionDef.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExtendedTextBox.cs" />
+    <Compile Include="ISplicer.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

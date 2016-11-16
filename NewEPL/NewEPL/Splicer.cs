@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace NewEPL {
-    public class Splicer : Control {
+    public class Splicer : Control, ISplicer {
         public static readonly DependencyProperty XProperty;
         public static readonly DependencyProperty YProperty;
         public static readonly DependencyProperty RelativeWidthProperty;

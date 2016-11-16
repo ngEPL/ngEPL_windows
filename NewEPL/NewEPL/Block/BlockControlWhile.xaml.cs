@@ -1,28 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace NewEPL {
+namespace NewEPL
+{
     /// <summary>
-    /// BlockTest1.xaml에 대한 상호 작용 논리
+    /// BlockControlWhile.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class BlockControlWhile : BlockTemplate {
-        double CalcHeight = 88;
-        
-        public BlockControlWhile() {
+    public partial class BlockControlWhile : BlockTemplate
+    {
+
+        public BlockControlWhile()
+        {
             InitializeComponent();
         }
 
-        public override double GetTotalHeight() {
+        public override double GetTotalHeight()
+        {
             double ret = ActualHeight;
 
-            foreach (var i in GetSplicers(1)) {
-                var splicer = (Splicer)VisualTreeHelper.GetChild(i, 0);
+            foreach (var i in GetSplicers(1, false))
+            {
+                var splicer = (Splicer)i;
 
                 if (splicer.YStack == 0) continue;
 
-                foreach (var j in splicer.BlockChildren) {
+                foreach (var j in splicer.BlockChildren)
+                {
                     ret += (j.Content as BlockTemplate).GetTotalHeight() - 10;
                 }
             }
@@ -30,45 +36,52 @@ namespace NewEPL {
             return ret;
         }
 
-        public override void IncreaseHeight(Splicer what, double height, int lv) {
+        public override void IncreaseHeight(Splicer what, double height, int lv)
+        {
 
             /// 나중에 스플라이서마다 이름을 지정할 예정
-            var parentBlock = (BlockTemplate)(((what.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
+            var parentBlock = (BlockTemplate)((what.Parent as Canvas).Parent as Grid).Parent;
             Splicer parentSplicer = what;
 
-            while (true) {
-                if (this.Equals(parentBlock)) {
-                    if (parentSplicer.YStack == 1) {
+            while (true)
+            {
+                if (this.Equals(parentBlock))
+                {
+                    if (parentSplicer.YStack == 1)
+                    {
                         if (BlockParent != null) (BlockParent.Content as BlockTemplate).IncreaseHeight(what, height, lv + 1);
                         return;
                     }
                 }
-                if (parentBlock.BlockParent == null) {
+                if (parentBlock.BlockParent == null)
+                {
                     break;
                 }
-                parentSplicer = parentBlock.SplicerParent;
-                parentBlock = (BlockTemplate)(((parentBlock.SplicerParent.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
+                parentSplicer = (Splicer)parentBlock.SplicerParent;
+                parentBlock = (BlockTemplate)((((Splicer)parentBlock.SplicerParent).Parent as Canvas).Parent as Grid).Parent;
             }
 
             var thumb = GetThumb();
             var image = (Image9)thumb.Template.FindName("image", thumb);
 
-            CalcHeight += height - 10;
+            if (lv == 0) image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, (int)height - 42, 0 }, image.Color);
+            else image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, (int)height - 10, 0 }, image.Color);
 
-            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, (int)CalcHeight, image.Color);
+            UpdateSplicer(image, (int)image.Source.Width, (int)image.Source.Height);
 
-            UpdateSplicer(image, (int)image.Patch.Width, (int)CalcHeight);
-
-            foreach (var i in GetSplicers(1)) {
-                var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
-                foreach (var j in splicer.BlockChildren) {
-                    j.MoveBlocks((Parent as BlockTemplate).X + Canvas.GetLeft(i), (Parent as BlockTemplate).Y + Canvas.GetTop(i));
+            foreach (var i in GetSplicers(1, false))
+            {
+                var splicer = (Splicer)i;
+                foreach (var j in splicer.BlockChildren)
+                {
+                    j.MoveBlocks((Parent as BlockTemplate).X + Canvas.GetLeft(splicer), (Parent as BlockTemplate).Y + Canvas.GetTop(splicer));
                     j.DifX = -((Parent as BlockTemplate).X - j.X);
                     j.DifY = -((Parent as BlockTemplate).Y - j.Y);
                 }
             }
 
-            if (BlockParent != null) {
+            if (BlockParent != null)
+            {
                 if (lv == 0)
                     (BlockParent.Content as BlockTemplate).IncreaseHeight(what, height - 32, lv + 1);
                 else
@@ -76,45 +89,53 @@ namespace NewEPL {
             }
         }
 
-        public override void DecreaseHeight(Splicer what, double height, int lv) {
+        public override void DecreaseHeight(Splicer what, double height, int lv)
+        {
 
             /// 나중에 스플라이서마다 이름을 지정할 예정
-            var parentBlock = (BlockTemplate)(((what.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
+            var parentBlock = (BlockTemplate)((what.Parent as Canvas).Parent as Grid).Parent;
             Splicer parentSplicer = what;
 
-            while (true) {
-                if (this.Equals(parentBlock)) {
-                    if (parentSplicer.YStack == 1) {
+            while (true)
+            {
+                if (this.Equals(parentBlock))
+                {
+                    if (parentSplicer.YStack == 1)
+                    {
                         if (BlockParent != null) (BlockParent.Content as BlockTemplate).DecreaseHeight(what, height, lv + 1);
                         return;
                     }
                 }
-                if (parentBlock.BlockParent == null) {
+                if (parentBlock.BlockParent == null)
+                {
                     break;
                 }
-                parentSplicer = parentBlock.SplicerParent;
-                parentBlock = (BlockTemplate)(((parentBlock.SplicerParent.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
+                parentSplicer = (Splicer)parentBlock.SplicerParent;
+
+                parentBlock = (BlockTemplate)((((Splicer)parentBlock.SplicerParent).Parent as Canvas).Parent as Grid).Parent;
             }
 
             var thumb = GetThumb();
             var image = (Image9)thumb.Template.FindName("image", thumb);
 
-            CalcHeight -= height - 10;
+            if (lv == 0) image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, -((int)height - 42), 0 }, image.Color);
+            else image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, -((int)height - 10), 0 }, image.Color);
 
-            image.Source = image.Patch.GetPatchedImage((int)image.Patch.Width, Math.Max((int)CalcHeight, 120), image.Color);
+            UpdateSplicer(image, (int)image.Source.Width, (int)image.Source.Height);
 
-            UpdateSplicer(image, (int)image.Patch.Width, Math.Max((int)CalcHeight, 120));
-
-            foreach (var i in GetSplicers(1)) {
-                var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
-                foreach (var j in splicer.BlockChildren) {
-                    j.MoveBlocks((Parent as BlockTemplate).X + Canvas.GetLeft(i), (Parent as BlockTemplate).Y + Canvas.GetTop(i));
+            foreach (var i in GetSplicers(1, false))
+            {
+                var splicer = (Splicer)i;
+                foreach (var j in splicer.BlockChildren)
+                {
+                    j.MoveBlocks((Parent as BlockTemplate).X + Canvas.GetLeft(splicer), (Parent as BlockTemplate).Y + Canvas.GetTop(splicer));
                     j.DifX = -((Parent as BlockTemplate).X - j.X);
                     j.DifY = -((Parent as BlockTemplate).Y - j.Y);
                 }
             }
 
-            if (BlockParent != null) {
+            if (BlockParent != null)
+            {
                 if (lv == 0)
                     (BlockParent.Content as BlockTemplate).DecreaseHeight(what, height - 32, lv + 1);
                 else

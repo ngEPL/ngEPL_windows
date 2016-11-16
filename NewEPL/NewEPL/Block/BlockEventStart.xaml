@@ -23,9 +23,7 @@
             </Thumb.Template>
         </Thumb>
         <Canvas>
-            <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
-                <local:Splicer Width="NaN" Height="12" Type="True" X="0" Y="5" YStack="1"/>
-            </Border>
+            <local:Splicer Canvas.Left="0" Canvas.Top="0" Width="NaN" Height="12" Type="True" X="0" Y="1" YStack="1"/>
         </Canvas>
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="32" VerticalAlignment="Center" Margin="0,0,0,0" IsHitTestVisible="False">
             <Label VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="시작되었을 때"/>

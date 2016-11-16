@@ -17,8 +17,8 @@ namespace NewEPL {
         public override double GetTotalHeight() {
             double ret = ActualHeight;
 
-            foreach (var i in GetSplicers(1)) {
-                var splicer = (Splicer)VisualTreeHelper.GetChild(i, 0);
+            foreach (var i in GetSplicers(1, false)) {
+                var splicer = (Splicer)i;
 
                 if (splicer.YStack == 0) continue;
 
@@ -33,7 +33,7 @@ namespace NewEPL {
         public override void IncreaseHeight(Splicer what, double height, int lv) {
 
             /// 나중에 스플라이서마다 이름을 지정할 예정
-            var parentBlock = (BlockTemplate)(((what.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
+            var parentBlock = (BlockTemplate)((what.Parent as Canvas).Parent as Grid).Parent;
             Splicer parentSplicer = what;
 
             while(true) {
@@ -46,8 +46,8 @@ namespace NewEPL {
                 if (parentBlock.BlockParent == null) {
                     break;
                 }
-                parentSplicer = parentBlock.SplicerParent;
-                parentBlock = (BlockTemplate)(((parentBlock.SplicerParent.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
+                parentSplicer = (Splicer)parentBlock.SplicerParent;
+                parentBlock = (BlockTemplate)((((Splicer)parentBlock.SplicerParent).Parent as Canvas).Parent as Grid).Parent;
             }
             
             var thumb = GetThumb();
@@ -55,13 +55,13 @@ namespace NewEPL {
 
             if (lv == 0) image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, (int)height - 42, 0 }, image.Color);
             else image.Source = image.Patch.GetPatchedImage(new List<int>() { 0, 0, 0 }, new List<int>() { 0, (int)height - 10, 0 }, image.Color);
-           
+            
             UpdateSplicer(image, (int)image.Source.Width, (int)image.Source.Height);
-        
-            foreach (var i in GetSplicers(1)) {
-                var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
+            
+            foreach (var i in GetSplicers(1, false)) {
+                var splicer = (Splicer)i;
                 foreach (var j in splicer.BlockChildren) {
-                    j.MoveBlocks((Parent as BlockTemplate).X + Canvas.GetLeft(i), (Parent as BlockTemplate).Y + Canvas.GetTop(i));
+                    j.MoveBlocks((Parent as BlockTemplate).X + Canvas.GetLeft(splicer), (Parent as BlockTemplate).Y + Canvas.GetTop(splicer));
                     j.DifX = -((Parent as BlockTemplate).X - j.X);
                     j.DifY = -((Parent as BlockTemplate).Y - j.Y);
                 }
@@ -78,7 +78,7 @@ namespace NewEPL {
         public override void DecreaseHeight(Splicer what, double height, int lv) {
 
             /// 나중에 스플라이서마다 이름을 지정할 예정
-            var parentBlock = (BlockTemplate)(((what.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
+            var parentBlock = (BlockTemplate)((what.Parent as Canvas).Parent as Grid).Parent;
             Splicer parentSplicer = what;
 
             while (true) {
@@ -91,8 +91,9 @@ namespace NewEPL {
                 if (parentBlock.BlockParent == null) {
                     break;
                 }
-                parentSplicer = parentBlock.SplicerParent;
-                parentBlock = (BlockTemplate)(((parentBlock.SplicerParent.Parent as Border).Parent as Canvas).Parent as Grid).Parent;
+                parentSplicer = (Splicer)parentBlock.SplicerParent;
+
+                parentBlock = (BlockTemplate)((((Splicer)parentBlock.SplicerParent).Parent as Canvas).Parent as Grid).Parent;
             }
 
             var thumb = GetThumb();
@@ -103,10 +104,10 @@ namespace NewEPL {
 
             UpdateSplicer(image, (int)image.Source.Width, (int)image.Source.Height);
 
-            foreach (var i in GetSplicers(1)) {
-                var splicer = (Splicer)VisualTreeHelper.GetChild(i as DependencyObject, 0);
+            foreach (var i in GetSplicers(1, false)) {
+                var splicer = (Splicer)i;
                 foreach (var j in splicer.BlockChildren) {
-                    j.MoveBlocks((Parent as BlockTemplate).X + Canvas.GetLeft(i), (Parent as BlockTemplate).Y + Canvas.GetTop(i));
+                    j.MoveBlocks((Parent as BlockTemplate).X + Canvas.GetLeft(splicer), (Parent as BlockTemplate).Y + Canvas.GetTop(splicer));
                     j.DifX = -((Parent as BlockTemplate).X - j.X);
                     j.DifY = -((Parent as BlockTemplate).Y - j.Y);
                 }

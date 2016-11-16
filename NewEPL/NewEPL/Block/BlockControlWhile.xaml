@@ -23,15 +23,9 @@
             </Thumb.Template>
         </Thumb>
         <Canvas>
-            <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="0" Canvas.Top="0">
-                <local:Splicer Width="NaN" Height="12" Type="False" X="0" Y="0" YStack="0"/>
-            </Border>
-            <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="38" Canvas.Top="50">
-                <local:Splicer Width="NaN" RelativeWidth="-16" Height="12" Type="True" X="16" Y="50" YStack="0"/>
-            </Border>
-            <Border BorderBrush="Red" BorderThickness="0" Canvas.Left="0" Canvas.Top="35">
-                <local:Splicer Width="NaN" RelativeWidth="-16" Height="12" Type="True" X="0" Y="35" YStack="1"/>
-            </Border>
+            <local:Splicer Canvas.Left="0" Canvas.Top="0" Width="NaN" Height="12" Type="False" X="0" Y="0" YStack="0"/>
+            <local:Splicer Canvas.Left="38" Canvas.Top="51" Width="NaN" RelativeWidth="-16" Height="12" Type="True" X="16" Y="51" YStack="0"/>
+            <local:Splicer Canvas.Left="0" Canvas.Top="51" Width="NaN" RelativeWidth="-16" Height="12" Type="True" X="0" Y="51" YStack="1"/>
         </Canvas>
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="32" VerticalAlignment="Top" Margin="0,10,0.333,0">
             <Label VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="../Resources/#나눔고딕" FontWeight="ExtraBold" Content="무한 반복" IsHitTestVisible="False" />
